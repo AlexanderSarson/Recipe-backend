@@ -68,5 +68,38 @@ public class RecipeResource {
 "    \"totalResults\": 719\n" +
 "}";
     }
+    
+    @Path("/random")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getRandomRecipe() {
+        return "{\n" +
+"    \"offset\": 0,\n" +
+"    \"number\": 2,\n" +
+"    \"results\": [\n" +
+"        {\n" +
+"            \"id\": 633508,\n" +
+"            \"image\": \"Baked-Cheese-Manicotti-633508.jpg\",\n" +
+"            \"imageUrls\": [\n" +
+"                \"Baked-Cheese-Manicotti-633508.jpg\"\n" +
+"            ],\n" +
+"            \"readyInMinutes\": 45,\n" +
+"            \"servings\": 6,\n" +
+"            \"title\": \"Baked Cheese Manicotti\"\n" +
+"        },\n" +
+"        {\n" +
+"            \"id\": 634873,\n" +
+"            \"image\": \"Best-Baked-Macaroni-and-Cheese-634873.jpg\",\n" +
+"            \"imageUrls\": [\n" +
+"                \"Best-Baked-Macaroni-and-Cheese-634873.jpg\"\n" +
+"            ],\n" +
+"            \"readyInMinutes\": 45,\n" +
+"            \"servings\": 12,\n" +
+"            \"title\": \"Best Baked Macaroni and Cheese\"\n" +
+"        }\n" +
+"    ],\n" +
+"    \"totalResults\": 719\n" +
+"}";
+    }
 
 }
