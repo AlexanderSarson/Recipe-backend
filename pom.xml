@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.teamgold</groupId>
-    <artifactId>Recipe-backend</artifactId>
+    <artifactId>recipe-backend</artifactId>
     <version>1</version>
     <packaging>war</packaging>
 
-    <name>Recipe-backend</name>
+    <name>recipe-backend</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
