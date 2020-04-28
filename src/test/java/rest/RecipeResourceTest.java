@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class RecipeResourceTest extends BaseResourceTest {
 
-    /*@Test
+    @Test
     void test_searchForRecipe() {
         String payload = "{name:\"Falafel Burgers with Feta Cucumber Sauce\", number:1}";
         given()
@@ -19,5 +19,5 @@ public class RecipeResourceTest extends BaseResourceTest {
                 .then()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("results", hasSize(1));
-    }*/
+    }
 }

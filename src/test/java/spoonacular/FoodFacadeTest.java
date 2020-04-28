@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 @Disabled
 public class FoodFacadeTest {
-    /*private FoodFacade foodFacade = new FoodFacade();
+    private FoodFacade foodFacade = new FoodFacade();
 
     @Disabled
     @Test
@@ -20,5 +20,5 @@ public class FoodFacadeTest {
 
         assertEquals("Falafel Burgers with Feta Cucumber Sauce", result.getTitle());
         assertEquals(492564,result.getId());
-    }*/
+    }
 }
