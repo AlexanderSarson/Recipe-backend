@@ -5,6 +5,9 @@ import java.util.List;
 public class FoodResultDTOList {
     private List<FoodResultDTO> results;
 
+    public FoodResultDTOList() {
+    }
+
     public FoodResultDTOList(List<FoodResultDTO> results) {
         this.results = results;
     }
