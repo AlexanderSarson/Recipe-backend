@@ -14,7 +14,7 @@ public class FoodFacadeTest {
 
     private FoodFacade foodFacade = new FoodFacade();
 
-    @Disabled
+    
     @Test
     void test_searchByName() {
         String search = "Falafel Burgers with Feta Cucumber Sauce";
