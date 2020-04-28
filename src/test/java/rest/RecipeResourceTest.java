@@ -20,4 +20,14 @@ public class RecipeResourceTest extends BaseResourceTest {
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("results", hasSize(1));
     }
+    
+    @Test
+    void test_getRandomRecipe() {
+        given()
+                .contentType("application/json")
+                .get("recipe/random/5")
+                .then()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("results", hasSize(5));
+    }
 }
