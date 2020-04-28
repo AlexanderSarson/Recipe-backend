@@ -1,5 +1,5 @@
 import dtos.FoodResultDTOList;
-import spoon.FoodFacade;
+import spoonacular.FoodFacade;
 
 import java.io.IOException;
 

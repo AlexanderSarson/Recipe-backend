@@ -38,16 +38,8 @@ public class HttpUtils {
                                Map<String,String> parameters, String apiKey) {
         String jsonResponse = null;
         try {
-            boolean hasParameters = false;
             // Prep the URL
-            String completeUrl = fetchUrl;
-            if(parameters != null) {
-                hasParameters = true;
-                completeUrl += generateParameters(parameters);
-            }
-            if(apiKey != null) {
-                completeUrl += hasParameters ? "&apiKey="+apiKey : "?apiKey="+apiKey;
-            }
+            String completeUrl = prepareUrl(fetchUrl, parameters, apiKey);
 
             // Setup URL connection
             URL url = new URL(completeUrl);
@@ -67,6 +59,19 @@ public class HttpUtils {
             e.printStackTrace();
         }
         return jsonResponse;
+    }
+
+    public static String prepareUrl(String baseUrl, Map<String,String> parameters, String apiKey) {
+        boolean hasParameters = false;
+        String completeUrl = baseUrl;
+        if(parameters != null) {
+            hasParameters = true;
+            completeUrl += generateParameters(parameters);
+        }
+        if(apiKey != null) {
+            completeUrl += hasParameters ? "&apiKey="+apiKey : "?apiKey="+apiKey;
+        }
+        return completeUrl;
     }
 
     /**

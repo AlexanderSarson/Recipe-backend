@@ -1,4 +1,4 @@
-package spoon;
+package spoonacular;
 
 import com.google.gson.Gson;
 import dtos.FoodResultDTOList;

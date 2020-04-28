@@ -1,4 +1,4 @@
-package spoon;
+package spoonacular;
 
 import dtos.FoodResultDTO;
 import dtos.FoodResultDTOList;

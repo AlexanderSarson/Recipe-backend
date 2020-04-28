@@ -5,12 +5,15 @@
  */
 package rest;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import spoon.FoodFacade;
+import dtos.FoodResultDTOList;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import spoonacular.FoodFacade;
 
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -39,14 +42,22 @@ public class RecipeResource {
      * Retrieves representation of an instance of rest.RecipeResource
      * @return an instance of java.lang.String
      */
+    @Operation(summary = "Search for recipes, given a part of a full title of the recipe",
+            tags = {"search"},
+            responses = {
+                    @ApiResponse(
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = FoodResultDTOList.class))),
+                    @ApiResponse(responseCode = "200", description = "The found recipes")})
     @Path("/search")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response searchForRecipe(String json) {
-        String name = new JsonParser().parse(json).getAsJsonObject().get("name").getAsString();
+        JsonObject object = new JsonParser().parse(json).getAsJsonObject();
+        String name = object.get("name").getAsString();
+        int number = object.get("number").getAsInt();
         return Response
-                .ok(foodFacade.searchByName(name,1))
+                .ok(foodFacade.searchByName(name,number))
                 .build();
     }
     
