@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import dtos.FoodResultDTOList;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -22,8 +23,14 @@ public class FoodFacade {
         Properties keyProperties = new Properties();
         try {
             // try to get the key from file
-            keyProperties.load(FoodFacade.class.getClassLoader().getResourceAsStream(KEY_PROPERTIES));
-            apiKey = keyProperties.getProperty("apiKey");
+            InputStream inputStream = FoodFacade.class.getClassLoader().getResourceAsStream(KEY_PROPERTIES);
+            if(inputStream != null) {
+                keyProperties.load(inputStream);
+                apiKey = keyProperties.getProperty("apiKey");
+            } else {
+                apiKey = System.getenv("apiKey");
+            }
+
         } catch (IOException ignored) {
             // If it is not present try to find it as a system variable.
             apiKey = System.getenv("apiKey");
