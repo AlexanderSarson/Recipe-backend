@@ -36,16 +36,17 @@ import java.io.IOException;
         tags = {
                 @Tag(name = "jokes", description = "API related to Jokes"),
                 @Tag(name = "login", description = "API related to Login"),
-                @Tag(name = "scrape", description = "API related to WebScraping")
+                @Tag(name = "scrape", description = "API related to WebScraping"),
+                @Tag(name = "search", description = "API related to searching for recipes")
         },
         servers = {
                 @Server(
                         description = "For Local host testing",
-                        url = "http://localhost:8080/TeamGoldStartCode"
+                        url = "http://localhost:8080/recipe-backend"
                 ),
                 @Server(
                         description = "Server API",
-                        url = "https://www.paepke.software/TeamGoldStartCode"
+                        url = "https://www.paepke.software/recipe-backend"
                 )
         }
 )
