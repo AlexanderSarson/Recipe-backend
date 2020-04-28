@@ -21,9 +21,12 @@ public class FoodFacade {
     public FoodFacade() {
         Properties keyProperties = new Properties();
         try {
+            // try to get the key from file
             keyProperties.load(FoodFacade.class.getClassLoader().getResourceAsStream(KEY_PROPERTIES));
             apiKey = keyProperties.getProperty("apiKey");
         } catch (IOException ignored) {
+            // If it is not present try to find it as a system variable.
+            apiKey = System.getenv("apiKey");
         }
     }
 
