@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.is;
 
 public class RecipeResourceTest extends BaseResourceTest {
 
@@ -29,5 +29,15 @@ public class RecipeResourceTest extends BaseResourceTest {
                 .then()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("results", hasSize(5));
+    }
+    
+    @Test
+    void test_getRecipeById() {
+        given()
+                .contentType("application/json")
+                .get("recipe/id/324694")
+                .then()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("id", is(324694));
     }
 }

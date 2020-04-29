@@ -5,9 +5,11 @@
  */
 package rest;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dtos.FoodResultDTOList;
+import dtos.FoodResultWithInstructionsDTO;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Contact;
@@ -55,6 +57,8 @@ import javax.ws.rs.core.MediaType;
 public class RecipeResource {
 
     private FoodFacade foodFacade = new FoodFacade();
+    private Gson gson = new Gson();
+
     @Context
     private UriInfo context;
 
@@ -101,6 +105,19 @@ public class RecipeResource {
         return Response
                 .ok(foodFacade.getRandomRecipes(number))
                 .build();
+    }
+    
+    @Operation(summary = "Get recipe by id",
+            tags = {"random"},
+            responses = {
+                @ApiResponse(
+                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = FoodResultDTOList.class))),
+                @ApiResponse(responseCode = "200", description = "The found recipe")})
+    @Path("/id/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getRecipeById(@PathParam("id") long id) {
+        return gson.toJson(foodFacade.getRecipeById(id));
     }
 
 }
