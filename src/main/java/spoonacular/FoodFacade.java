@@ -80,7 +80,13 @@ public class FoodFacade {
         JsonObject jsonObject = new JsonParser().parse(data).getAsJsonObject();
         return getFoodResultDTOList(LIST_OF_FOOD_PROPERTIES, jsonObject);
     }
-    
+    /**
+     * Gets a FoodResultDTOList with specific properties
+     * 
+     * @param listOfProperties the properties to extract
+     * @param jsonObject the response object from endpoint
+     * @return  FoodResultDTOList containing a list of FoodResultDTOs
+     */
     public FoodResultDTOList getFoodResultDTOList(List<String> listOfProperties, JsonObject jsonObject){
         FoodResultDTOList resultDTOList = new FoodResultDTOList();
         List<FoodResultDTO> foodResultList = new ArrayList<>();
@@ -97,6 +103,13 @@ public class FoodFacade {
         return resultDTOList;
     }
 
+    /**
+     * Gets a FoodResultDTO from parsing
+     * 
+     * @param listOfProperties the properties to extract
+     * @param jsonObject the response object from endpoint
+     * @return A FoodResultDTO containing a recipe
+     */
     public FoodResultDTO recipeParser(List<String> listOfProperties, JsonObject jsonObject) {
         FoodResultDTO foodDTO = new FoodResultDTO();
         listOfProperties.forEach(prop
@@ -110,6 +123,12 @@ public class FoodFacade {
         return foodDTO;
     }
 
+    /**
+     * Parses a JsonArray containing ingredients
+     * 
+     * @param jsonIngredients a JsonArray containing ingredients
+     * @return A List of FoodIngredientDTOs containing ingredients
+     */
     public List<FoodIngredientDTO> ingredientsParser(JsonArray jsonIngredients){
         List<FoodIngredientDTO> ingredients = new ArrayList<>();
         jsonIngredients.forEach(ingredient -> {
