@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dtos.FoodResultDTO;
 import dtos.FoodResultDTOList;
+import dtos.FoodResultWithInstructionsDTO;
+import dtos.InstructionsDTO;
 import java.util.List;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,6 @@ public class FoodFacadeTest {
 
     private FoodFacade foodFacade = new FoodFacade();
 
-    
     @Test
     void test_searchByName() {
         String search = "Falafel Burgers with Feta Cucumber Sauce";
@@ -25,8 +26,23 @@ public class FoodFacadeTest {
         assertEquals("Falafel Burgers with Feta Cucumber Sauce", result.getTitle());
         assertEquals(492564, result.getId());
     }
-
     
+    @Test
+    public void test_getRecipeById() {
+        long expected = 324694;//716429;
+        FoodResultWithInstructionsDTO recipeWithInstructions = foodFacade.getRecipeById(expected);
+        long result = recipeWithInstructions.getId();
+        assertEquals(expected, result);
+    }
+    
+    @Test
+    public void test_getInstructionsByRecipeId(){
+        long recipeId = 324694;
+        int expectedNumberOfInstructions = 2;
+        List<InstructionsDTO> result = foodFacade.getInstructionsByRecipeId(recipeId);
+        assertEquals(expectedNumberOfInstructions, result.size());
+    }
+
     @Test
     public void test_random() {
         int expectedRecipes = 5;
@@ -34,9 +50,10 @@ public class FoodFacadeTest {
         assertEquals(expectedRecipes, results.getResults().size());
     }
 
+    @Disabled
     @Test
     public void test_recipeParser() {
-        List<String> listOfExpectedProperties = List.of("id", "title", "extendedIngredients", "instructions");
+        List<String> listOfExpectedProperties = List.of("id", "title", "extendedIngredients");
         JsonObject jsonObject = new JsonParser().parse(RandomResponseRecipes.RANDOM_RESPONSE).getAsJsonObject();
         JsonObject singleRecipe = jsonObject.get("recipes").getAsJsonArray().get(0).getAsJsonObject();
         FoodResultDTO resultDTO = foodFacade.recipeParser(listOfExpectedProperties, singleRecipe);
@@ -46,6 +63,5 @@ public class FoodFacadeTest {
 
         assertEquals(expectedId, (Long) resultDTO.getId());
         assertEquals(expectedTitle, resultDTO.getTitle());
-        assertEquals(expectedInstructions, resultDTO.getInstructions());
     }
 }

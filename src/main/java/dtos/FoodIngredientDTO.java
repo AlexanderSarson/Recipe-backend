@@ -5,13 +5,20 @@
  */
 package dtos;
 
+import java.util.List;
+
 /**
  *
  * @author root
  */
 public class FoodIngredientDTO {
     private long id;
+    private FoodIngredientMeasureDTO measures;
     private String name;
+    private List<String> meta;
+    private String original;
+    private String originalName;
+    
 
     public FoodIngredientDTO() {
     }

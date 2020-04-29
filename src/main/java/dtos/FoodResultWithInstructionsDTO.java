@@ -1,9 +1,8 @@
 package dtos;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class FoodResultDTO {
+public class FoodResultWithInstructionsDTO {
 
     private long id;
     private String title;
@@ -20,42 +19,31 @@ public class FoodResultDTO {
     private List<String> dishTypes;
     private List<FoodIngredientDTO> extendedIngredients;
     private String summary;
+    private List<InstructionsDTO> instructions;
 
-    public void setField(String name, Object value) {
-        switch (name) {
-            case "id":
-                this.id = Long.parseLong(value.toString());
-                break;
-            case "image":
-                this.image = value.toString().replace("\"", "");
-                break;
-            case "imageUrls":
-                this.imageUrls = (List<String>) value;
-                break;
-            case "readyInMinutes":
-                this.readyInMinutes = Integer.parseInt(value.toString());
-                break;
-            case "servings":
-                this.servings = Integer.parseInt(value.toString());
-                break;
-            case "title":
-                this.title = value.toString().replace("\"", "");
-                break;
-            case "extendedIngredients":
-                this.extendedIngredients = (List<FoodIngredientDTO>) value;
-                break;
-            case "summary":
-                this.summary = value.toString().replace("\"", "");
-                break;
-            default:
-                break;
-        }
+    public FoodResultWithInstructionsDTO() {
     }
 
-    public FoodResultDTO() {
+    public FoodResultWithInstructionsDTO(FoodResultDTO recipe, List<InstructionsDTO> instructions) {
+        this.id = recipe.getId();
+        this.title = recipe.getTitle();
+        this.image = recipe.getImage();
+        this.imageUrls = recipe.getImageUrls();
+        this.servings = recipe.getServings();
+        this.readyInMinutes = recipe.getReadyInMinutes();
+        this.cuisines = recipe.getCuisines();
+        this.dairyFree = recipe.isDairyFree();
+        this.glutenFree = recipe.isGlutenFree();
+        this.vegan = recipe.isVegan();
+        this.vegetarian = recipe.isVegetarian();
+        this.veryHealthy = recipe.isVeryHealthy();
+        this.dishTypes = recipe.getDishTypes();
+        this.extendedIngredients = recipe.getExtendedIngredients();
+        this.summary = recipe.getSummary();
+        this.instructions = instructions;
     }
-
-    public FoodResultDTO(long id, String image, List<String> imageUrls, int readyInMinutes, int servings, String title) {
+    
+    public FoodResultWithInstructionsDTO(long id, String image, List<String> imageUrls, int readyInMinutes, int servings, String title) {
         this.id = id;
         this.image = image;
         this.imageUrls = imageUrls;
@@ -63,8 +51,8 @@ public class FoodResultDTO {
         this.servings = servings;
         this.title = title;
     }
-
-    public FoodResultDTO(long id, String image, List<String> imageUrls, int readyInMinutes, int servings, String title, List<FoodIngredientDTO> ingredients) {
+    
+    public FoodResultWithInstructionsDTO(long id, String image, List<String> imageUrls, int readyInMinutes, int servings, String title, List<FoodIngredientDTO> ingredients) {
         this.id = id;
         this.image = image;
         this.imageUrls = imageUrls;
@@ -73,6 +61,7 @@ public class FoodResultDTO {
         this.title = title;
         this.extendedIngredients = ingredients;
     }
+    
 
     public List<FoodIngredientDTO> getExtendedIngredients() {
         return extendedIngredients;
@@ -88,6 +77,14 @@ public class FoodResultDTO {
 
     public void setCuisines(List<String> cuisines) {
         this.cuisines = cuisines;
+    }
+
+    public List<InstructionsDTO> getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(List<InstructionsDTO> instructions) {
+        this.instructions = instructions;
     }
     
     public boolean isDairyFree() {

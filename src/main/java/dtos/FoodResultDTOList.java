@@ -1,11 +1,13 @@
 package dtos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FoodResultDTOList {
     private List<FoodResultDTO> results;
 
     public FoodResultDTOList() {
+        this.results = new ArrayList<>();
     }
 
     public FoodResultDTOList(List<FoodResultDTO> results) {
@@ -18,6 +20,10 @@ public class FoodResultDTOList {
 
     public void setResults(List<FoodResultDTO> results) {
         this.results = results;
+    }
+    
+    public void addFoodResult(FoodResultDTO dto){
+        this.results.add(dto);
     }
 
     @Override
