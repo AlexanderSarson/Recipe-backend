@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class FoodFacade {
     private static final String BASE_URL = "https://api.spoonacular.com";
     private static final String SEARCH_URL = BASE_URL + "/recipes/complexSearch";
     private static final String RANDOM_URL = BASE_URL + "/recipes/random";
-    private static final List<String> LIST_OF_FOOD_PROPERTIES = List.of("id", "title", "extendedIngredients", "instructions");
+    private static final List<String> LIST_OF_FOOD_PROPERTIES = Arrays.asList("id", "title", "extendedIngredients", "instructions");
 
     private Gson gson = new Gson();
 
