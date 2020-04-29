@@ -1,25 +1,43 @@
 package dtos;
 
+import com.google.gson.annotations.Expose;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FoodResultDTO {
 
+    @Expose(serialize = true, deserialize = true)
     private long id;
+    @Expose(serialize = true, deserialize = true)
     private String title;
+    @Expose(serialize = true, deserialize = true)
     private String image;
+    @Expose(serialize = true, deserialize = true)
     private List<String> imageUrls;
+    @Expose(serialize = true, deserialize = true)
     private int servings;
+    @Expose(serialize = true, deserialize = true)
     private int readyInMinutes;
+    @Expose(serialize = true, deserialize = true)
     private List<String> cuisines;
+    @Expose(serialize = true, deserialize = true)
     private boolean dairyFree;
+    @Expose(serialize = true, deserialize = true)
     private boolean glutenFree;
+    @Expose(serialize = true, deserialize = true)
     private boolean vegan;
+    @Expose(serialize = true, deserialize = true)
     private boolean vegetarian;
+    @Expose(serialize = true, deserialize = true)
     private boolean veryHealthy;
+    @Expose(serialize = true, deserialize = true)
     private List<String> dishTypes;
+    @Expose(serialize = true, deserialize = true)
     private List<FoodIngredientDTO> extendedIngredients;
+    @Expose(serialize = true, deserialize = true)
     private String summary;
+    @Expose(deserialize = false)
+    private List<InstructionsDTO> instructions;
 
     public void setField(String name, Object value) {
         switch (name) {
@@ -74,6 +92,14 @@ public class FoodResultDTO {
         this.extendedIngredients = ingredients;
     }
 
+    public List<InstructionsDTO> getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(List<InstructionsDTO> instructions) {
+        this.instructions = instructions;
+    }
+
     public List<FoodIngredientDTO> getExtendedIngredients() {
         return extendedIngredients;
     }
@@ -89,7 +115,7 @@ public class FoodResultDTO {
     public void setCuisines(List<String> cuisines) {
         this.cuisines = cuisines;
     }
-    
+
     public boolean isDairyFree() {
         return dairyFree;
     }
@@ -146,7 +172,6 @@ public class FoodResultDTO {
         this.summary = summary;
     }
 
-    
     public long getId() {
         return id;
     }

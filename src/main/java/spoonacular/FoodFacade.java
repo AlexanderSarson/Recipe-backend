@@ -1,13 +1,13 @@
 package spoonacular;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dtos.FoodIngredientDTO;
 import dtos.FoodResultDTO;
 import dtos.FoodResultDTOList;
-import dtos.FoodResultWithInstructionsDTO;
 import dtos.InstructionsDTO;
 
 import java.io.IOException;
@@ -29,10 +29,12 @@ public class FoodFacade {
     private static final String BASE_URL = "https://api.spoonacular.com";
     private static final String SEARCH_URL = BASE_URL + "/recipes/complexSearch";
     private static final String RANDOM_URL = BASE_URL + "/recipes/random";
-    private static final List<String> LIST_OF_FOOD_PROPERTIES_DETAILED = Arrays.asList("id", "title", "servings", "readyInMinutes", "cuisines","dairyFree", "glutenFree", "vegan", "vegetarian","veryHealthy", "dishTypes", "extendedIngredients", "summary");
+    private static final List<String> LIST_OF_FOOD_PROPERTIES_DETAILED = Arrays.asList("id", "title", "servings", "readyInMinutes", "cuisines", "dairyFree", "glutenFree", "vegan", "vegetarian", "veryHealthy", "dishTypes", "extendedIngredients", "summary");
     private static final List<String> LIST_OF_FOOD_PROPERTIES_RANDOM = Arrays.asList("id", "title", "servings", "readyInMinutes", "summary");
 
-    private Gson gson = new Gson();
+    private Gson gson = new GsonBuilder()
+            .excludeFieldsWithoutExposeAnnotation()
+            .create();
 
     public FoodFacade() {
         Properties keyProperties = new Properties();
@@ -67,25 +69,30 @@ public class FoodFacade {
         String data = fetch(SEARCH_URL, GET, parameters, apiKey);
         return gson.fromJson(data, FoodResultDTOList.class);
     }
+
     /**
      * Gets a detailed recipe by id with instructions
+     *
      * @param recipeId
      * @return a detailed recipe with instructions
      */
-    public FoodResultWithInstructionsDTO getRecipeById(long recipeId){
+    public FoodResultDTO getRecipeById(long recipeId) {
         FoodResultDTOList resultDTOList = new FoodResultDTOList();
         String url = BASE_URL + "/recipes/" + recipeId + "/information";
         String data = fetch(url, GET, null, apiKey);
         FoodResultDTO recipe = gson.fromJson(data, FoodResultDTO.class);
-        FoodResultWithInstructionsDTO recipeWithInstructions = new FoodResultWithInstructionsDTO(recipe, getInstructionsByRecipeId(recipeId));
-        return recipeWithInstructions;
+        recipe.setInstructions(getInstructionsByRecipeId(recipeId));
+        //FoodResultWithInstructionsDTO recipeWithInstructions = new FoodResultWithInstructionsDTO(recipe, getInstructionsByRecipeId(recipeId));
+        return recipe;
     }
+
     /**
      * GETS a lists of instructions
+     *
      * @param recipeId
      * @return a list of instructions to the recipe
      */
-    public List<InstructionsDTO> getInstructionsByRecipeId(long recipeId){
+    public List<InstructionsDTO> getInstructionsByRecipeId(long recipeId) {
         String url = BASE_URL + "/recipes/" + recipeId + "/analyzedInstructions";
         String data = fetch(url, GET, null, apiKey);
         InstructionsDTO[] instructionsArray = gson.fromJson(data, InstructionsDTO[].class);
@@ -106,21 +113,22 @@ public class FoodFacade {
         JsonObject jsonObject = new JsonParser().parse(data).getAsJsonObject();
         return getFoodResultDTOList(LIST_OF_FOOD_PROPERTIES_RANDOM, jsonObject);
     }
+
     /**
      * Gets a FoodResultDTOList with specific properties
-     * 
+     *
      * @param listOfProperties the properties to extract
      * @param jsonObject the response object from endpoint
-     * @return  FoodResultDTOList containing a list of FoodResultDTOs
+     * @return FoodResultDTOList containing a list of FoodResultDTOs
      */
-    public FoodResultDTOList getFoodResultDTOList(List<String> listOfProperties, JsonObject jsonObject){
+    public FoodResultDTOList getFoodResultDTOList(List<String> listOfProperties, JsonObject jsonObject) {
         FoodResultDTOList resultDTOList = new FoodResultDTOList();
         List<FoodResultDTO> foodResultList = new ArrayList<>();
-        if(jsonObject.get("recipes") != null){
+        if (jsonObject.get("recipes") != null) {
             jsonObject.get("recipes").getAsJsonArray().forEach(obj -> {
                 foodResultList.add(recipeParser(listOfProperties, obj.getAsJsonObject()));
             });
-        } else if (jsonObject.get("results") != null){
+        } else if (jsonObject.get("results") != null) {
             jsonObject.get("results").getAsJsonArray().forEach(obj -> {
                 foodResultList.add(recipeParser(listOfProperties, obj.getAsJsonObject()));
             });
@@ -133,7 +141,7 @@ public class FoodFacade {
 
     /**
      * Gets a FoodResultDTO from parsing
-     * 
+     *
      * @param listOfProperties the properties to extract
      * @param jsonObject the response object from endpoint
      * @return A FoodResultDTO containing a recipe
@@ -153,11 +161,11 @@ public class FoodFacade {
 
     /**
      * Parses a JsonArray containing ingredients
-     * 
+     *
      * @param jsonIngredients a JsonArray containing ingredients
      * @return A List of FoodIngredientDTOs containing ingredients
      */
-    public List<FoodIngredientDTO> ingredientsParser(JsonArray jsonIngredients){
+    public List<FoodIngredientDTO> ingredientsParser(JsonArray jsonIngredients) {
         List<FoodIngredientDTO> ingredients = new ArrayList<>();
         jsonIngredients.forEach(ingredient -> {
             FoodIngredientDTO foodIngredient = new FoodIngredientDTO();
@@ -167,5 +175,5 @@ public class FoodFacade {
         });
         return ingredients;
     }
-    
+
 }

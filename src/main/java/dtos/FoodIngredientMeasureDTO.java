@@ -10,26 +10,27 @@ package dtos;
  * @author root
  */
 public class FoodIngredientMeasureDTO {
-    private MeasureMetricDTO metric;
-    private MeasureUsDTO us;
+    private MeasureDTO metric;
+    private MeasureDTO us;
 
     public FoodIngredientMeasureDTO() {
     }
 
-    public MeasureMetricDTO getMetric() {
+    public MeasureDTO getMetric() {
         return metric;
     }
 
-    public void setMetric(MeasureMetricDTO metric) {
+    public void setMetric(MeasureDTO metric) {
         this.metric = metric;
     }
 
-    public MeasureUsDTO getUs() {
+    public MeasureDTO getUs() {
         return us;
     }
 
-    public void setUs(MeasureUsDTO us) {
+    public void setUs(MeasureDTO us) {
         this.us = us;
     }
+
 
 }
