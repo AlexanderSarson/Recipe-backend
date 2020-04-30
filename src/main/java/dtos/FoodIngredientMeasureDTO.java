@@ -5,12 +5,16 @@
  */
 package dtos;
 
+import com.google.gson.annotations.Expose;
+
 /**
  *
  * @author root
  */
 public class FoodIngredientMeasureDTO {
+    @Expose(serialize = true, deserialize = true)
     private MeasureDTO metric;
+    @Expose(serialize = true, deserialize = true)
     private MeasureDTO us;
 
     public FoodIngredientMeasureDTO() {

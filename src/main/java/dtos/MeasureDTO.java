@@ -5,13 +5,18 @@
  */
 package dtos;
 
+import com.google.gson.annotations.Expose;
+
 /**
  *
  * @author root
  */
 public class MeasureDTO {
+    @Expose(serialize = true, deserialize = true)
     private double amount;
+    @Expose(serialize = true, deserialize = true)
     private String unitLong;
+    @Expose(serialize = true, deserialize = true)
     private String unitShort;
 
     public MeasureDTO() {
