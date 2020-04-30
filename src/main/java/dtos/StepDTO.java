@@ -5,12 +5,16 @@
  */
 package dtos;
 
+import com.google.gson.annotations.Expose;
+
 /**
  *
  * @author root
  */
 public class StepDTO {
+    @Expose(serialize = true, deserialize = true)
     private int number;
+    @Expose(serialize = true, deserialize = true)
     private String step;
 
     public StepDTO() {

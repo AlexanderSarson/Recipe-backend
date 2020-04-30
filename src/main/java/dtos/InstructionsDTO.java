@@ -5,6 +5,7 @@
  */
 package dtos;
 
+import com.google.gson.annotations.Expose;
 import java.util.List;
 
 /**
@@ -12,7 +13,9 @@ import java.util.List;
  * @author root
  */
 public class InstructionsDTO {
+    @Expose(serialize = true, deserialize = true)
     private String name;
+    @Expose(serialize = true, deserialize = true)
     private List<StepDTO> steps;
 
     public InstructionsDTO() {

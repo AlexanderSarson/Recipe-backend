@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Disabled;
 
 public class FoodFacadeTest {
 
@@ -27,7 +28,7 @@ public class FoodFacadeTest {
     
     @Test
     public void test_getRecipeById() {
-        long expected = 324694;//716429;
+        long expected = 324694  ;//716429;
         RecipeDTO recipe = FOODFACADE.getRecipeById(expected);
         long result = recipe.getId();
         assertEquals(expected, result);
