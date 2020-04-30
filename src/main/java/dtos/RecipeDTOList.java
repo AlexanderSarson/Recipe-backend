@@ -3,33 +3,33 @@ package dtos;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FoodResultDTOList {
-    private List<FoodResultDTO> results;
+public class RecipeDTOList {
+    private List<RecipeDTO> results;
 
-    public FoodResultDTOList() {
+    public RecipeDTOList() {
         this.results = new ArrayList<>();
     }
 
-    public FoodResultDTOList(List<FoodResultDTO> results) {
+    public RecipeDTOList(List<RecipeDTO> results) {
         this.results = results;
     }
 
-    public List<FoodResultDTO> getResults() {
+    public List<RecipeDTO> getResults() {
         return results;
     }
 
-    public void setResults(List<FoodResultDTO> results) {
+    public void setResults(List<RecipeDTO> results) {
         this.results = results;
     }
     
-    public void addFoodResult(FoodResultDTO dto){
+    public void addFoodResult(RecipeDTO dto){
         this.results.add(dto);
     }
 
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        for(FoodResultDTO dto: results) {
+        for(RecipeDTO dto: results) {
             stringBuilder.append(dto.toString());
         }
         return stringBuilder.toString();

@@ -9,12 +9,12 @@ package dtos;
  *
  * @author root
  */
-public class MeasureUsDTO {
+public class MeasureDTO {
     private double amount;
     private String unitLong;
     private String unitShort;
 
-    public MeasureUsDTO() {
+    public MeasureDTO() {
     }
 
     public double getAmount() {
@@ -40,6 +40,5 @@ public class MeasureUsDTO {
     public void setUnitShort(String unitShort) {
         this.unitShort = unitShort;
     }
-    
     
 }

@@ -8,8 +8,7 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import dtos.FoodResultDTOList;
-import dtos.FoodResultWithInstructionsDTO;
+import dtos.RecipeDTOList;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Contact;
@@ -77,7 +76,7 @@ public class RecipeResource {
             tags = {"search"},
             responses = {
                 @ApiResponse(
-                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = FoodResultDTOList.class))),
+                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecipeDTOList.class))),
                 @ApiResponse(responseCode = "200", description = "The found recipes")})
     @Path("/search")
     @POST
@@ -96,7 +95,7 @@ public class RecipeResource {
             tags = {"random"},
             responses = {
                 @ApiResponse(
-                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = FoodResultDTOList.class))),
+                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecipeDTOList.class))),
                 @ApiResponse(responseCode = "200", description = "The found random recipes")})
     @Path("/random/{number}")
     @GET
@@ -111,7 +110,7 @@ public class RecipeResource {
             tags = {"random"},
             responses = {
                 @ApiResponse(
-                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = FoodResultDTOList.class))),
+                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecipeDTOList.class))),
                 @ApiResponse(responseCode = "200", description = "The found recipe")})
     @Path("/id/{id}")
     @GET
