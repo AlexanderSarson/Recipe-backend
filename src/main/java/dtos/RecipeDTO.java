@@ -1,10 +1,9 @@
 package dtos;
 
 import com.google.gson.annotations.Expose;
-import java.util.ArrayList;
 import java.util.List;
 
-public class FoodResultDTO {
+public class RecipeDTO {
 
     @Expose(serialize = true, deserialize = true)
     private long id;
@@ -70,10 +69,10 @@ public class FoodResultDTO {
         }
     }
 
-    public FoodResultDTO() {
+    public RecipeDTO() {
     }
 
-    public FoodResultDTO(long id, String image, List<String> imageUrls, int readyInMinutes, int servings, String title) {
+    public RecipeDTO(long id, String image, List<String> imageUrls, int readyInMinutes, int servings, String title) {
         this.id = id;
         this.image = image;
         this.imageUrls = imageUrls;
@@ -82,7 +81,7 @@ public class FoodResultDTO {
         this.title = title;
     }
 
-    public FoodResultDTO(long id, String image, List<String> imageUrls, int readyInMinutes, int servings, String title, List<FoodIngredientDTO> ingredients) {
+    public RecipeDTO(long id, String image, List<String> imageUrls, int readyInMinutes, int servings, String title, List<FoodIngredientDTO> ingredients) {
         this.id = id;
         this.image = image;
         this.imageUrls = imageUrls;
