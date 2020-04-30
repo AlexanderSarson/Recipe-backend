@@ -2,7 +2,9 @@ package entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -10,6 +12,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
 @Table(name = "users")
+@NamedQuery(name = "User.deleteAllRows", query = "DELETE FROM User")
 public class User implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -42,6 +45,12 @@ public class User implements Serializable {
     }
     return rolesAsStrings;
   }
+
+  @JoinTable(name = "user_favourites", joinColumns = {
+          @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
+          @JoinColumn(name = "recipe_id", referencedColumnName = "recipe_id")})
+  @ManyToMany(cascade = CascadeType.PERSIST)
+  private List<FavouriteRecipe> favourites = new ArrayList<>();
 
   public User() {}
 
@@ -84,4 +93,19 @@ public class User implements Serializable {
     roleList.add(userRole);
   }
 
+  public void addFavourite(FavouriteRecipe recipe) {
+    favourites.add(recipe);
+  }
+
+  public void removeFavourite(FavouriteRecipe recipe) {
+    favourites.remove(recipe);
+  }
+
+  public List<FavouriteRecipe> getFavourites() {
+    return favourites;
+  }
+
+  public void setFavourites(List<FavouriteRecipe> favourites) {
+    this.favourites = favourites;
+  }
 }
