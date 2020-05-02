@@ -6,6 +6,7 @@
 package rest;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dtos.RecipeDTOList;
@@ -18,8 +19,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import session.SessionOffsetManager;
 import spoonacular.FoodFacade;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -82,13 +85,44 @@ public class RecipeResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response searchForRecipe(String json) {
+    public Response searchForRecipe(@Context HttpServletRequest request, String json) {
+        // Get the session id from the header.
+        String sessionId = request.getHeader("sessionId") ;
+        // Get data from the post request.
         JsonObject object = new JsonParser().parse(json).getAsJsonObject();
         String name = object.get("name").getAsString();
         int number = object.get("number").getAsInt();
+
+        // The sessionId is mereged with the seach, as to make sure the user is still using the same search.
+        sessionId += name;
+        int sessionOffset = SessionOffsetManager.getSessionOffset(sessionId);
+
+        // Correct the sessionOffset.
+        if(isOffsetMovingForward(object)) {
+            SessionOffsetManager.setSessionOffset(sessionId, sessionOffset+number);
+        } else {
+            sessionOffset = Math.min(0, sessionOffset-(number*2));
+            SessionOffsetManager.setSessionOffset(sessionId,sessionOffset);
+        }
+
+        // Return data, fetched using both the limiting number and the offset.
         return Response
-                .ok(foodFacade.searchByName(name, number))
+                .ok(foodFacade.searchByName(name, number, sessionOffset))
                 .build();
+    }
+
+    /**
+     * Check whether or not the request is moving the  offset forward or backwards.
+     * @param object the object holding the String offsetMove value
+     * @return FALSE if 'backwards' is specified, TRUE in any other case.
+     */
+    private boolean isOffsetMovingForward(JsonObject object) {
+        JsonElement offsetMove = object.get("offsetMove");
+        if(offsetMove != null) {
+            String move = offsetMove.getAsString();
+            return !move.equals("backward");
+        }
+        return true;
     }
 
     @Operation(summary = "Get x random number of recipes",

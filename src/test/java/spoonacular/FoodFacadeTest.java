@@ -18,7 +18,7 @@ public class FoodFacadeTest {
     @Test
     void test_searchByName() {
         String search = "Falafel Burgers with Feta Cucumber Sauce";
-        RecipeDTOList results = FOODFACADE.searchByName(search, 1);
+        RecipeDTOList results = FOODFACADE.searchByName(search, 1,0);
         assertEquals(1, results.getResults().size());
         RecipeDTO result = results.getResults().get(0);
 

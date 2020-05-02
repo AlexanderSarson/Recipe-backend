@@ -31,7 +31,7 @@ public class FoodFacade {
     private static final String RANDOM_URL = BASE_URL + "/recipes/random";
     private static final List<String> LIST_OF_FOOD_PROPERTIES_DETAILED = Arrays.asList("id", "title", "servings", "readyInMinutes", "cuisines", "dairyFree", "glutenFree", "vegan", "vegetarian", "veryHealthy", "dishTypes", "extendedIngredients", "summary");
     private static final List<String> LIST_OF_FOOD_PROPERTIES_RANDOM = Arrays.asList("id", "title", "servings", "readyInMinutes", "summary");
-        private static final List<String> LIST_OF_FOOD_PROPERTIES_SEARCH = Arrays.asList("id", "title", "image");
+    private static final List<String> LIST_OF_FOOD_PROPERTIES_SEARCH = Arrays.asList("id", "title", "image");
 
     private Gson gson = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
@@ -60,13 +60,15 @@ public class FoodFacade {
      *
      * @param name The name of the recipe to search for
      * @param numberOfRecipes the number of items to be returned.
+     * @param offset the offset, at which to start the search.
      * @return A RecipeDTOList containing a list of all the FoodResultDTOs
      */
-    public RecipeDTOList searchByName(String name, int numberOfRecipes) {
+    public RecipeDTOList searchByName(String name, int numberOfRecipes, int offset) {
         Map<String, String> parameters = new HashMap<>();
         String titleMatch = name.replaceAll(" ", "%20");
         parameters.put("titleMatch", titleMatch);
         parameters.put("number", "" + numberOfRecipes);
+        parameters.put("offset", ""+ offset);
         String data = fetch(SEARCH_URL, GET, parameters, apiKey);
         JsonObject jsonObject = new JsonParser().parse(data).getAsJsonObject();
         return getFoodResultDTOList(LIST_OF_FOOD_PROPERTIES_SEARCH, jsonObject);
@@ -124,6 +126,9 @@ public class FoodFacade {
      */
     public RecipeDTOList getFoodResultDTOList(List<String> listOfProperties, JsonObject jsonObject) {
         RecipeDTOList resultDTOList = new RecipeDTOList();
+        resultDTOList.setOffset(jsonObject.get("offset").getAsInt());
+        resultDTOList.setNumber(jsonObject.get("number").getAsInt());
+        resultDTOList.setTotalResults(jsonObject.get("totalResults").getAsInt());
         List<RecipeDTO> foodResultList = new ArrayList<>();
         if (jsonObject.get("recipes") != null) {
             jsonObject.get("recipes").getAsJsonArray().forEach(obj -> {
