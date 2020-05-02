@@ -39,6 +39,10 @@ public class SessionOffsetManager {
         return sessionOffsetMap;
     }
 
+    public static void setSessionOffsetMap(ConcurrentHashMap<String,SessionOffset> newSessionOffsetMap) {
+        sessionOffsetMap = newSessionOffsetMap;
+    }
+
     public SessionOffsetManager getInstance() {
         return instance;
     }
