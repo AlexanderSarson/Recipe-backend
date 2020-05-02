@@ -1,6 +1,8 @@
 package facades;
 
+import dtos.UserDto;
 import dtos.favourites.FavouriteRecipeDTO;
+import dtos.favourites.FavouriteRecipeDtoList;
 import entity.FavouriteRecipe;
 import entity.Role;
 import entity.User;
@@ -73,7 +75,7 @@ public class UserFacade {
         return user;
     }
 
-    public User addFavourite (String username, FavouriteRecipeDTO recipeDTO) throws UserException {
+    public UserDto addFavourite (String username, FavouriteRecipeDTO recipeDTO) throws UserException {
         EntityManager em = emf.createEntityManager();
         User user;
         FavouriteRecipe recipe;
@@ -94,10 +96,10 @@ public class UserFacade {
         } finally {
             em.close();
         }
-        return user;
+        return new UserDto(user);
     }
 
-    public User removeFavourite(String username, FavouriteRecipeDTO favRecipeDTO) throws UserException, RecipeException {
+    public UserDto removeFavourite(String username, FavouriteRecipeDTO favRecipeDTO) throws UserException, RecipeException {
         EntityManager em = emf.createEntityManager();
         User user;
         FavouriteRecipe recipe;
@@ -117,13 +119,13 @@ public class UserFacade {
         } finally {
             em.close();
         }
-        return user;
+        return new UserDto(user);
     }
 
-    public List<FavouriteRecipeDTO> getFavourites (String username) throws UserException {
+    public FavouriteRecipeDtoList getFavourites (String username) throws UserException {
         EntityManager em = emf.createEntityManager();
         User user;
-        List<FavouriteRecipeDTO> favouriteRecipeDTOList = new ArrayList<>();
+        FavouriteRecipeDtoList favouriteRecipeDTOList = new FavouriteRecipeDtoList();
         try {
             user = em.find(User.class, username);
             if (user == null) {
@@ -131,7 +133,7 @@ public class UserFacade {
             }
             List<FavouriteRecipe> favouriteRecipes = user.getFavourites();
             for (FavouriteRecipe recipe : favouriteRecipes) {
-                favouriteRecipeDTOList.add(new FavouriteRecipeDTO(recipe));
+                favouriteRecipeDTOList.addRecipeToList(new FavouriteRecipeDTO(recipe));
             }
             return favouriteRecipeDTOList;
         } finally {

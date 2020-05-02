@@ -1,7 +1,7 @@
 package facades;
 
+import dtos.UserDto;
 import dtos.favourites.FavouriteRecipeDTO;
-import entity.FavouriteRecipe;
 import entity.User;
 import errorhandling.RecipeException;
 import errorhandling.UserException;
@@ -11,7 +11,7 @@ import utils.EMF_Creator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserFacadeTest {
 
@@ -19,7 +19,6 @@ class UserFacadeTest {
     private static UserFacade userFacade;
     private static User u1, u2;
     private static FavouriteRecipeDTO favRecipeDTO;
-    // private static PersonDTO pd1, pd2;
 
     @BeforeAll
     public static void setUpClass() {
@@ -36,7 +35,7 @@ class UserFacadeTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("User.deleteAllRows").executeUpdate();
-            em.createNamedQuery("FavouriteRecipe.deleteAllRows").executeUpdate();
+            em.createNamedQuery("favourite_recipe.deleteAllRows").executeUpdate();
             em.createNativeQuery("DELETE FROM startcode_test.user_favourites").executeUpdate();
             em.persist(u1);
             em.persist(u2);
@@ -49,8 +48,8 @@ class UserFacadeTest {
     @Test
     void test_addFavourite() throws UserException {
         int expected = 1;
-        u2 = userFacade.addFavourite(u2.getUserName(), favRecipeDTO);
-        int result = u2.getFavourites().size();
+        UserDto userDto = userFacade.addFavourite(u2.getUserName(), favRecipeDTO);
+        int result = userDto.getFavouriteRecipes().size();
         assertEquals(expected, result);
     }
 
@@ -59,22 +58,21 @@ class UserFacadeTest {
         Assertions.assertThrows(UserException.class, () -> userFacade.addFavourite("user3", favRecipeDTO));
     }
 
-    @Disabled // TODO Dunno why its failing......
     @Test
     void test_removeFavourite() throws RecipeException, UserException {
         int expected = 0;
         FavouriteRecipeDTO favDto = new FavouriteRecipeDTO(12345L, "Pancake", "someImgUrl", 45, 2);
-        u1 = userFacade.addFavourite(u1.getUserName(), favDto);
-        u1 = userFacade.removeFavourite(u1.getUserName(), favDto);
-        int result = u1.getFavourites().size();
+        UserDto userDto = userFacade.addFavourite(u1.getUserName(), favDto);
+        userDto = userFacade.removeFavourite(userDto.getUsername(), favDto);
+        int result = userDto.getFavouriteRecipes().size();
         assertEquals(expected, result);
     }
 
     @Test
     void test_getFavouriteRecipeList() throws UserException {
         int expected = 1;
-        u1 = userFacade.addFavourite(u1.getUserName(), favRecipeDTO);
-        int result = userFacade.getFavourites(u1.getUserName()).size();
+        UserDto userDto = userFacade.addFavourite(u1.getUserName(), favRecipeDTO);
+        int result = userFacade.getFavourites(userDto.getUsername()).getSize();
         assertEquals(expected, result);
     }
 

@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import dtos.favourites.FavouriteRecipeDTO;
 import org.mindrot.jbcrypt.BCrypt;
 
 @Entity

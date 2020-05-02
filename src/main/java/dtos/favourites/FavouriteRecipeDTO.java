@@ -1,7 +1,9 @@
 package dtos.favourites;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import entity.FavouriteRecipe;
 
+@JsonTypeName("favourites")
 public class FavouriteRecipeDTO {
     private Long id;
     private String title;

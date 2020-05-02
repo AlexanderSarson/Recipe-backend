@@ -14,8 +14,8 @@ import javax.validation.constraints.Size;
 
 
 @Entity
-@Table(name = "FavouriteRecipe")
-@NamedQuery(name = "FavouriteRecipe.deleteAllRows", query = "DELETE FROM FavouriteRecipe")
+@Table(name = "favourite_recipe")
+@NamedQuery(name = "favourite_recipe.deleteAllRows", query = "DELETE FROM FavouriteRecipe ")
 public class FavouriteRecipe implements Serializable {
 
     @Id
