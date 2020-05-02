@@ -90,24 +90,22 @@ public class RecipeResource {
         String sessionId = request.getHeader("sessionId") ;
         // Get data from the post request.
         JsonObject object = new JsonParser().parse(json).getAsJsonObject();
-        String name = object.get("name").getAsString();
+        String search = object.get("name").getAsString();
         int number = object.get("number").getAsInt();
 
-        // The sessionId is mereged with the seach, as to make sure the user is still using the same search.
-        sessionId += name;
-        int sessionOffset = SessionOffsetManager.getSessionOffset(sessionId);
+        int sessionOffset = SessionOffsetManager.getSessionOffset(sessionId,search);
 
         // Correct the sessionOffset.
         if(isOffsetMovingForward(object)) {
-            SessionOffsetManager.setSessionOffset(sessionId, sessionOffset+number);
+            SessionOffsetManager.setSessionOffset(sessionId,search,sessionOffset+number);
         } else {
             sessionOffset = Math.min(0, sessionOffset-(number*2));
-            SessionOffsetManager.setSessionOffset(sessionId,sessionOffset);
+            SessionOffsetManager.setSessionOffset(sessionId,search,sessionOffset);
         }
 
         // Return data, fetched using both the limiting number and the offset.
         return Response
-                .ok(foodFacade.searchByName(name, number, sessionOffset))
+                .ok(foodFacade.searchByName(search, number, sessionOffset))
                 .build();
     }
 
