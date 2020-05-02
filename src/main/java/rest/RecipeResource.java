@@ -98,9 +98,12 @@ public class RecipeResource {
         // Correct the sessionOffset.
         if(isOffsetMovingForward(object)) {
             SessionOffsetManager.setSessionOffset(sessionId,search,sessionOffset+number);
-        } else {
+        } else if(isOffsetMovingBackward(object)) {
             sessionOffset = Math.min(0, sessionOffset-(number*2));
             SessionOffsetManager.setSessionOffset(sessionId,search,sessionOffset);
+        } else {
+            sessionOffset = 0;
+            SessionOffsetManager.setSessionOffset(sessionId,search,sessionOffset+number);
         }
 
         // Return data, fetched using both the limiting number and the offset.
@@ -110,17 +113,30 @@ public class RecipeResource {
     }
 
     /**
-     * Check whether or not the request is moving the  offset forward or backwards.
+     * Check if the request is moving the offset forward.
      * @param object the object holding the String offsetMove value
-     * @return FALSE if 'backwards' is specified, TRUE in any other case.
+     * @return FALSE if 'forward' is specified, FALSE in any other case.
      */
     private boolean isOffsetMovingForward(JsonObject object) {
-        JsonElement offsetMove = object.get("offsetMove");
+        JsonElement offsetMove = object.get("moveOffset");
         if(offsetMove != null) {
             String move = offsetMove.getAsString();
-            return !move.equals("backward");
+            return move.equals("forward");
         }
-        return true;
+        return false;
+    }
+    /**
+     * Check if the request is moving the offset forward.
+     * @param object the object holding the String offsetMove value
+     * @return TRUE if 'backwards' is specified, FALSE in any other case.
+     */
+    private boolean isOffsetMovingBackward(JsonObject object) {
+        JsonElement offsetMove = object.get("moveOffset");
+        if(offsetMove != null) {
+            String move = offsetMove.getAsString();
+            return move.equals("backward");
+        }
+        return false;
     }
 
     @Operation(summary = "Get x random number of recipes",

@@ -4,7 +4,8 @@ import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SessionOffsetManager {
-    private final static long CLEAN_PERIOD = 1800000;
+    //                           clean every 30 min
+    private final static long CLEAN_PERIOD = 30 * 60 * 1000;
     private final static long CLEAN_DELAY = 0;
     private static ConcurrentHashMap<String, SessionOffset> sessionOffsetMap = new ConcurrentHashMap<>();
     private static final SessionOffsetManager instance = new SessionOffsetManager();
@@ -22,6 +23,9 @@ public class SessionOffsetManager {
      */
     public static Integer getSessionOffset(String sessionId, String search) {
         String combined = sessionId + search;
+        if(isNewSearch(sessionId,search)) {
+            removeOldSearch(sessionId);
+        }
         SessionOffset offset = sessionOffsetMap.getOrDefault(combined,null);
         if(offset == null) {
             return 0;
@@ -47,6 +51,25 @@ public class SessionOffsetManager {
             offset = new SessionOffset(newValue);
         }
         sessionOffsetMap.put(combined, offset);
+    }
+
+    private static boolean isNewSearch(String sessionId, String search) {
+        for(String key : sessionOffsetMap.keySet()) {
+            if(key.contains(sessionId) && !key.contains(search)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void removeOldSearch(String sessionId) {
+        String searchToBeRemoved = "";
+        for(String key : sessionOffsetMap.keySet()) {
+            if(key.contains(sessionId))  {
+                searchToBeRemoved = key;
+            }
+        }
+        sessionOffsetMap.remove(searchToBeRemoved);
     }
 
     public static ConcurrentHashMap<String,SessionOffset> getSessionOffsetMap() {

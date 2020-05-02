@@ -1,10 +1,6 @@
 package spoonacular;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import dtos.FoodIngredientDTO;
 import dtos.RecipeDTO;
 import dtos.RecipeDTOList;
@@ -126,9 +122,7 @@ public class FoodFacade {
      */
     public RecipeDTOList getFoodResultDTOList(List<String> listOfProperties, JsonObject jsonObject) {
         RecipeDTOList resultDTOList = new RecipeDTOList();
-        resultDTOList.setOffset(jsonObject.get("offset").getAsInt());
-        resultDTOList.setNumber(jsonObject.get("number").getAsInt());
-        resultDTOList.setTotalResults(jsonObject.get("totalResults").getAsInt());
+        handleGeneralResults(jsonObject, resultDTOList);
         List<RecipeDTO> foodResultList = new ArrayList<>();
         if (jsonObject.get("recipes") != null) {
             jsonObject.get("recipes").getAsJsonArray().forEach(obj -> {
@@ -143,6 +137,20 @@ public class FoodFacade {
         }
         resultDTOList.setResults(foodResultList);
         return resultDTOList;
+    }
+
+    private void handleGeneralResults(JsonObject jsonObject, RecipeDTOList resultDTOList) {
+        JsonElement offset = jsonObject.get("offset");
+        if(offset != null)
+            resultDTOList.setOffset(offset.getAsInt());
+
+        JsonElement number = jsonObject.get("number");
+        if(number != null)
+            resultDTOList.setNumber(number.getAsInt());
+
+        JsonElement totalResults = jsonObject.get("totalResults");
+        if(totalResults != null)
+            resultDTOList.setTotalResults(totalResults.getAsInt());
     }
 
     /**
