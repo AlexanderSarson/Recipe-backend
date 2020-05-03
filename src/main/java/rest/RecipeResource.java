@@ -93,18 +93,7 @@ public class RecipeResource {
         String search = object.get("name").getAsString();
         int number = object.get("number").getAsInt();
 
-        int sessionOffset = SessionOffsetManager.getSessionOffset(sessionId,search);
-
-        // Correct the sessionOffset.
-        if(isOffsetMovingForward(object)) {
-            SessionOffsetManager.setSessionOffset(sessionId,search,sessionOffset+number);
-        } else if(isOffsetMovingBackward(object)) {
-            sessionOffset = Math.min(0, sessionOffset-(number*2));
-            SessionOffsetManager.setSessionOffset(sessionId,search,sessionOffset);
-        } else {
-            sessionOffset = 0;
-            SessionOffsetManager.setSessionOffset(sessionId,search,sessionOffset+number);
-        }
+        int sessionOffset = getSessionOffset(sessionId, object, search, number);
 
         // Return data, fetched using both the limiting number and the offset.
         return Response
@@ -113,30 +102,26 @@ public class RecipeResource {
     }
 
     /**
-     * Check if the request is moving the offset forward.
-     * @param object the object holding the String offsetMove value
-     * @return FALSE if 'forward' is specified, FALSE in any other case.
+     * This will handle all of the offset correction needed.
+     * @param sessionId the sessionId of the current request.
+     * @param object The POSTed object.
+     * @param search the searched recipe
+     * @param number the number of elements to fetch.
+     * @return A Integer offset.
      */
-    private boolean isOffsetMovingForward(JsonObject object) {
+    private int getSessionOffset(String sessionId, JsonObject object, String search, int number) {
+        int sessionOffset = SessionOffsetManager.getSessionOffset(sessionId,search);
         JsonElement offsetMove = object.get("moveOffset");
-        if(offsetMove != null) {
-            String move = offsetMove.getAsString();
-            return move.equals("forward");
+        if(offsetMove != null && offsetMove.getAsString().equals("forward")) {
+            SessionOffsetManager.setSessionOffset(sessionId,search,sessionOffset+number);
+        } else if(offsetMove != null && offsetMove.getAsString().equals("backward")) {
+            sessionOffset = Math.min(0, sessionOffset-(number*2));
+            SessionOffsetManager.setSessionOffset(sessionId,search,sessionOffset);
+        } else {
+            sessionOffset = 0;
+            SessionOffsetManager.setSessionOffset(sessionId,search,sessionOffset+number);
         }
-        return false;
-    }
-    /**
-     * Check if the request is moving the offset forward.
-     * @param object the object holding the String offsetMove value
-     * @return TRUE if 'backwards' is specified, FALSE in any other case.
-     */
-    private boolean isOffsetMovingBackward(JsonObject object) {
-        JsonElement offsetMove = object.get("moveOffset");
-        if(offsetMove != null) {
-            String move = offsetMove.getAsString();
-            return move.equals("backward");
-        }
-        return false;
+        return sessionOffset;
     }
 
     @Operation(summary = "Get x random number of recipes",
