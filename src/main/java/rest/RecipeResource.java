@@ -6,6 +6,7 @@
 package rest;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dtos.RecipeDTOList;
@@ -18,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import session.SessionOffsetManager;
 import spoonacular.FoodFacade;
 
 import javax.ws.rs.*;
@@ -83,12 +85,45 @@ public class RecipeResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response searchForRecipe(String json) {
+        // Get data from the post request.
         JsonObject object = new JsonParser().parse(json).getAsJsonObject();
-        String name = object.get("name").getAsString();
+        String search = object.get("name").getAsString();
         int number = object.get("number").getAsInt();
+
+        JsonElement sessionIdElement = object.get("sessionId");
+        String sessionId = "";
+        if(sessionIdElement != null)
+            sessionId = sessionIdElement.getAsString();
+
+        int sessionOffset = getSessionOffset(sessionId, object, search, number);
+
+        // Return data, fetched using both the limiting number and the offset.
         return Response
-                .ok(foodFacade.searchByName(name, number))
+                .ok(foodFacade.searchByName(search, number, sessionOffset))
                 .build();
+    }
+
+    /**
+     * This will handle all of the offset correction needed.
+     * @param sessionId the sessionId of the current request.
+     * @param object The POSTed object.
+     * @param search the searched recipe
+     * @param number the number of elements to fetch.
+     * @return A Integer offset.
+     */
+    private int getSessionOffset(String sessionId, JsonObject object, String search, int number) {
+        int sessionOffset = SessionOffsetManager.getSessionOffset(sessionId,search);
+        JsonElement offsetMove = object.get("moveOffset");
+        if(offsetMove != null && offsetMove.getAsString().equals("forward")) {
+            SessionOffsetManager.setSessionOffset(sessionId,search,sessionOffset+number);
+        } else if(offsetMove != null && offsetMove.getAsString().equals("backward")) {
+            sessionOffset = Math.min(0, sessionOffset-(number*2));
+            SessionOffsetManager.setSessionOffset(sessionId,search,sessionOffset);
+        } else {
+            sessionOffset = 0;
+            SessionOffsetManager.setSessionOffset(sessionId,search,sessionOffset+number);
+        }
+        return sessionOffset;
     }
 
     @Operation(summary = "Get x random number of recipes",
