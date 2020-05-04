@@ -85,13 +85,16 @@ public class RecipeResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response searchForRecipe(@Context HttpServletRequest request, String json) {
-        // Get the session id from the header.
-        String sessionId = request.getHeader("sessionId") ;
+    public Response searchForRecipe(String json) {
         // Get data from the post request.
         JsonObject object = new JsonParser().parse(json).getAsJsonObject();
         String search = object.get("name").getAsString();
         int number = object.get("number").getAsInt();
+
+        JsonElement sessionIdElement = object.get("sessionId");
+        String sessionId = "";
+        if(sessionIdElement != null)
+            sessionId = sessionIdElement.getAsString();
 
         int sessionOffset = getSessionOffset(sessionId, object, search, number);
 
