@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public class SessionOffset {
     // Time in Minutes = if lastAccess is more than 30 min old it becomes stale.
-    private final static int MAX_TIME = 30;
+    private static final int MAX_TIME = 30;
     private int offset;
     private LocalDateTime lastAccess;
 

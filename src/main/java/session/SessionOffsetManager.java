@@ -2,12 +2,13 @@ package session;
 
 import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class SessionOffsetManager {
     //                           clean every 30 min
-    private final static long CLEAN_PERIOD = 30 * 60 * 1000;
-    private final static long CLEAN_DELAY = 0;
-    private static ConcurrentHashMap<String, SessionOffset> sessionOffsetMap = new ConcurrentHashMap<>();
+    private static final long CLEAN_PERIOD = 30 * 60 * 1000L;
+    private static final long CLEAN_DELAY = 0;
+    private static ConcurrentMap<String, SessionOffset> sessionOffsetMap = new ConcurrentHashMap<>();
     private static final SessionOffsetManager instance = new SessionOffsetManager();
 
     private SessionOffsetManager() {
@@ -72,11 +73,11 @@ public class SessionOffsetManager {
         sessionOffsetMap.remove(searchToBeRemoved);
     }
 
-    public static ConcurrentHashMap<String,SessionOffset> getSessionOffsetMap() {
+    public static ConcurrentMap<String,SessionOffset> getSessionOffsetMap() {
         return sessionOffsetMap;
     }
 
-    public static void setSessionOffsetMap(ConcurrentHashMap<String,SessionOffset> newSessionOffsetMap) {
+    public static void setSessionOffsetMap(ConcurrentMap<String,SessionOffset> newSessionOffsetMap) {
         sessionOffsetMap = newSessionOffsetMap;
     }
 

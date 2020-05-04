@@ -22,7 +22,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import session.SessionOffsetManager;
 import spoonacular.FoodFacade;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
