@@ -45,7 +45,7 @@ public class HttpUtilsTest {
     @Test
     public void test_prepareUrl_without_parameters_and_key() {
         String expected = TEST_URL;
-        String result = HttpUtils.prepareUrl(TEST_URL, null, null);
+        String result = HttpUtils.prepareUrl(TEST_URL, null);
 
         assertEquals(expected,result);
     }
@@ -53,21 +53,7 @@ public class HttpUtilsTest {
     @Test
     public void test_prepareUrl_with_parameters() {
         String expected = TEST_URL + "?param1=first&param2=second";
-        String result = HttpUtils.prepareUrl(TEST_URL,parameters,null);
-        assertEquals(expected,result);
-    }
-
-    @Test
-    public void test_prepareUrl_with_key() {
-        String expected = TEST_URL + "?apiKey=" + TEST_KEY;
-        String result = HttpUtils.prepareUrl(TEST_URL,null,TEST_KEY);
-        assertEquals(expected,result);
-    }
-
-    @Test
-    public void test_prepareUrl_with_parameters_and_key() {
-        String expected = TEST_URL + "?param1=first&param2=second&apiKey="+TEST_KEY;
-        String result = HttpUtils.prepareUrl(TEST_URL,parameters,TEST_KEY);
+        String result = HttpUtils.prepareUrl(TEST_URL,parameters);
         assertEquals(expected,result);
     }
 }

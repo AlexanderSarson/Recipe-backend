@@ -1,7 +1,6 @@
 package rest;
 
 import org.glassfish.grizzly.http.util.HttpStatus;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
@@ -10,7 +9,6 @@ import static org.hamcrest.Matchers.is;
 
 public class RecipeResourceTest extends BaseResourceTest {
 
-    @Disabled
     @Test
     void test_searchForRecipe() {
         String payload = "{name:\"Falafel Burgers with Feta Cucumber Sauce\", number:1}";
@@ -23,7 +21,6 @@ public class RecipeResourceTest extends BaseResourceTest {
                 .body("results", hasSize(1));
     }
 
-    @Disabled
     @Test
     void test_getRandomRecipe() {
         given()
@@ -34,7 +31,6 @@ public class RecipeResourceTest extends BaseResourceTest {
                 .body("results", hasSize(5));
     }
 
-    @Disabled
     @Test
     void test_getRecipeById() {
         given()
