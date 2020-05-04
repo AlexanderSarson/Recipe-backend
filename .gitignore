@@ -7,3 +7,4 @@ out/
 sqldump/
 src/main/resources/testing.properties
 SetupTestUsers.java
+*.iml
