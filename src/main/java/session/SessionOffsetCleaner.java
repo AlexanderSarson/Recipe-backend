@@ -7,12 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class SessionOffsetCleaner extends TimerTask {
 
     @Override
     public void run() {
-        ConcurrentHashMap<String,SessionOffset> sessionOffsetMap = SessionOffsetManager.getSessionOffsetMap();
+        ConcurrentMap<String,SessionOffset> sessionOffsetMap = SessionOffsetManager.getSessionOffsetMap();
         List<String> sessionIdsToBeRemoved = new ArrayList<>();
         for(Map.Entry<String,SessionOffset> entry: sessionOffsetMap.entrySet()) {
             String key = entry.getKey();
