@@ -2,8 +2,6 @@ package utils;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Scanner;
@@ -22,7 +20,7 @@ public class HttpUtils {
         String jsonResponse = null;
         try {
             // Prep the URL
-            String completeUrl = prepareUrl(fetchUrl, parameters, apiKey);
+            String completeUrl = prepareUrl(fetchUrl, parameters);
 
             // Setup URL connection
             URL url = new URL(completeUrl);
@@ -30,6 +28,8 @@ public class HttpUtils {
 
             // Prep the Headers
             connection.setRequestMethod(method.name());
+            connection.addRequestProperty("X-RapidAPI-Host", "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com");
+            connection.addRequestProperty("X-RapidAPI-Key", apiKey);
             generateDefaultHeaders(connection);
 
             // Get the response
@@ -44,15 +44,12 @@ public class HttpUtils {
         return jsonResponse;
     }
 
-    public static String prepareUrl(String baseUrl, Map<String,String> parameters, String apiKey) {
+    public static String prepareUrl(String baseUrl, Map<String,String> parameters) {
         boolean hasParameters = false;
         String completeUrl = baseUrl;
         if(parameters != null) {
             hasParameters = true;
             completeUrl += generateParameters(parameters);
-        }
-        if(apiKey != null) {
-            completeUrl += hasParameters ? "&apiKey="+apiKey : "?apiKey="+apiKey;
         }
         return completeUrl;
     }

@@ -22,7 +22,7 @@ public class FoodFacade {
 
     private static final String KEY_PROPERTIES = "key.properties";
     private String apiKey;
-    private static final String BASE_URL = "https://api.spoonacular.com";
+    private static final String BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com";
     private static final String SEARCH_URL = BASE_URL + "/recipes/complexSearch";
     private static final String RANDOM_URL = BASE_URL + "/recipes/random";
     private static final List<String> LIST_OF_FOOD_PROPERTIES_DETAILED = Arrays.asList("id", "title", "servings", "readyInMinutes", "cuisines", "dairyFree", "glutenFree", "vegan", "vegetarian", "veryHealthy", "dishTypes", "extendedIngredients", "summary");
