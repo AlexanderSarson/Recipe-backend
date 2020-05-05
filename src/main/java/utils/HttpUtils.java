@@ -1,5 +1,7 @@
 package utils;
 
+import session.Search;
+
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.net.URL;
@@ -17,11 +19,17 @@ public class HttpUtils {
      */
     public static String fetch(String fetchUrl, HttpsMethod method,
                                Map<String,String> parameters, String apiKey) {
+        String completeUrl = prepareUrl(fetchUrl, parameters);
+        return doFetch(completeUrl,method,apiKey);
+    }
+
+    public static String complexFetch(String fetchUrl, HttpsMethod method, Search search, String apiKey) {
+        return doFetch(fetchUrl + search.toString(), method, apiKey);
+    }
+
+    public static String doFetch(String completeUrl, HttpsMethod method, String apiKey) {
         String jsonResponse = null;
         try {
-            // Prep the URL
-            String completeUrl = prepareUrl(fetchUrl, parameters);
-
             // Setup URL connection
             URL url = new URL(completeUrl);
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
@@ -43,6 +51,8 @@ public class HttpUtils {
         }
         return jsonResponse;
     }
+
+
 
     public static String prepareUrl(String baseUrl, Map<String,String> parameters) {
         boolean hasParameters = false;

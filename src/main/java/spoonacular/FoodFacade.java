@@ -5,6 +5,7 @@ import dtos.FoodIngredientDTO;
 import dtos.RecipeDTO;
 import dtos.RecipeDTOList;
 import dtos.InstructionsDTO;
+import session.Search;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import static utils.HttpUtils.complexFetch;
 import static utils.HttpUtils.fetch;
 import static utils.HttpsMethod.*;
 
@@ -59,7 +61,7 @@ public class FoodFacade {
      * @param offset the offset, at which to start the search.
      * @return A RecipeDTOList containing a list of all the FoodResultDTOs
      */
-    public RecipeDTOList searchByName(String name, int numberOfRecipes, int offset) {
+    public RecipeDTOList searchByNam_(String name, int numberOfRecipes, int offset) {
         Map<String, String> parameters = new HashMap<>();
         String titleMatch = name.replaceAll(" ", "%20");
         parameters.put("titleMatch", titleMatch);
@@ -69,6 +71,13 @@ public class FoodFacade {
         JsonObject jsonObject = new JsonParser().parse(data).getAsJsonObject();
         return getFoodResultDTOList(LIST_OF_FOOD_PROPERTIES_SEARCH, jsonObject);
     }
+
+    public RecipeDTOList complexSearch(Search search) {
+        String data = complexFetch(SEARCH_URL,GET,search,apiKey);
+        JsonObject jsonObject = new JsonParser().parse(data).getAsJsonObject();
+        return getFoodResultDTOList(LIST_OF_FOOD_PROPERTIES_SEARCH, jsonObject);
+    }
+
 
     /**
      * Gets a detailed recipe by id with instructions
