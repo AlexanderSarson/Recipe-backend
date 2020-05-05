@@ -14,6 +14,16 @@ import entity.User;
 import errorhandling.RecipeException;
 import errorhandling.UserException;
 import facades.UserFacade;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.media.Content;
+
 import utils.EMF_Creator;
 
 import javax.persistence.EntityManagerFactory;
@@ -25,10 +35,33 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+@OpenAPIDefinition(
+        info = @Info(
+                title = "User API",
+                version = "0.1",
+                description = "Simple API to add or remove recipes from favourites, or get all favourite recipes from a user",
+                contact = @Contact(name = "Team Gold", email = "team-gold@cphbusiness.dk")
+        ),
+        tags = {
+                @Tag(name = "user", description = "API related to user Info")
 
+        },
+        servers = {
+                @Server(
+                        description = "For Local host testing",
+                        url = "http://localhost:8080/recipe-backend"
+                ),
+                @Server(
+                        description = "Server API",
+                        url = "https://www.sarson.codes/recipe-backend"
+                )
+
+        }
+)
 @Path("/user")
 public class UserResource {
 
@@ -41,7 +74,13 @@ public class UserResource {
     public Response get() {
         return Response.ok().build();
     }
-
+    @Operation(summary = "Add or remove a favourite recipe to/from a users favourite recipe list",
+    tags = {"user"},
+            responses = {
+            @ApiResponse(
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
+                @ApiResponse(responseCode = "200", description = "The requested user information"),
+                @ApiResponse(responseCode="400", description = "User not found")})
     @POST
     @Path("favourites")
     @Produces({MediaType.APPLICATION_JSON})
@@ -66,7 +105,14 @@ public class UserResource {
 
         return Response.ok(user).build();
     }
-    
+
+    @Operation(summary = "Get all favourite recipes from username",
+            tags = {"user"},
+            responses = {
+                    @ApiResponse(
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
+                    @ApiResponse(responseCode = "200", description = "The requested favourite recipes"),
+                    @ApiResponse(responseCode="400", description = "User not found")})
     @GET
     @Path("favourites/{username}")
     @Produces({MediaType.APPLICATION_JSON})
