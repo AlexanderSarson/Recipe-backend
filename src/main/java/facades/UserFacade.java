@@ -42,7 +42,7 @@ public class UserFacade {
 
     public User createUser(String username, String password) throws UserException {
         List<Role> roleList = new ArrayList<>();
-        roleList.add(new Role("user"));
+        roleList.add(getUserRole("user"));
         User user = new User(username,password);
         user.setRoleList(roleList);
         EntityManager entityManager = emf.createEntityManager();
@@ -59,6 +59,23 @@ public class UserFacade {
             entityManager.close();
         }
         return user;
+    }
+    
+    public Role getUserRole(String rolename){
+        EntityManager em = emf.createEntityManager();
+        Role role;
+        try {
+            role = em.find(Role.class, rolename);
+            if (role == null){
+                role = new Role(rolename);
+                em.getTransaction().begin();
+                em.persist(role);
+                em.getTransaction().commit();
+            }
+        } finally {
+            em.close();
+        }
+        return role;
     }
 
     public User getVerifiedUser(String username, String password) throws AuthenticationException {

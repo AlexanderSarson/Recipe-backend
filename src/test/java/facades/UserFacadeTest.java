@@ -3,6 +3,7 @@ package facades;
 import dtos.UserDto;
 import dtos.favourites.FavouriteRecipeDTO;
 import entity.User;
+import errorhandling.AuthenticationException;
 import errorhandling.RecipeException;
 import errorhandling.UserException;
 import org.junit.jupiter.api.*;
@@ -35,6 +36,7 @@ class UserFacadeTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("User.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Roles.deleteAllRows").executeUpdate();
             em.createNamedQuery("favourite_recipe.deleteAllRows").executeUpdate();
             em.createNativeQuery("DELETE FROM startcode_test.user_favourites").executeUpdate();
             em.persist(u1);
@@ -79,5 +81,44 @@ class UserFacadeTest {
     @Test
     void test_getFavouritesForNonExistingUser_shouldThrowException() {
         Assertions.assertThrows(UserException.class, () -> userFacade.getFavourites("user3"));
+    }
+
+    
+    @Test
+    public void test_createUser() throws UserException {
+        String expectedUsername = "Mads";
+        String expectedPassword = "hejmeddig";
+        User newUser = userFacade.createUser(expectedUsername, expectedPassword);
+
+        assertEquals(expectedUsername, newUser.getUserName());
+    }
+    
+    @Test
+    public void test_createExistingUser() throws UserException {
+        String expectedUsername = "Oscar";
+        String expectedPassword = "okok";
+        User newUser = userFacade.createUser(expectedUsername, expectedPassword);
+        Assertions.assertThrows(UserException.class, () -> userFacade.createUser(expectedUsername, expectedPassword));
+    }
+    
+    @Test
+    public void test_getRole(){
+        String expectedRole = "user";
+        String resultRole = userFacade.getUserRole(expectedRole).getRoleName();
+        assertEquals(expectedRole, resultRole);
+    }
+    
+    @Test
+    public void test_getVerifiedUser() throws UserException, AuthenticationException{
+        String expectedUsername = "Oscar";
+        String expectedPassword = "okok";
+        User newUser = userFacade.createUser(expectedUsername, expectedPassword);
+        String resultUsername = userFacade.getVerifiedUser(expectedUsername, expectedPassword).getUserName();
+        assertEquals(expectedUsername, resultUsername);
+    }
+    
+    @Test
+    public void test_getVerifiedUserException(){
+        Assertions.assertThrows(AuthenticationException.class, () -> userFacade.getVerifiedUser("user1", "okas"));
     }
 }
