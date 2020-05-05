@@ -54,24 +54,10 @@ public class FoodFacade {
     }
 
     /**
-     * Gets a RecipeDTOList with recipes matching the searched name
-     *
-     * @param name The name of the recipe to search for
-     * @param numberOfRecipes the number of items to be returned.
-     * @param offset the offset, at which to start the search.
+     * Gets a RecipeDTOList with recipes matching the complex search
+     * @param search the complex search object.
      * @return A RecipeDTOList containing a list of all the FoodResultDTOs
      */
-    public RecipeDTOList searchByNam_(String name, int numberOfRecipes, int offset) {
-        Map<String, String> parameters = new HashMap<>();
-        String titleMatch = name.replaceAll(" ", "%20");
-        parameters.put("titleMatch", titleMatch);
-        parameters.put("number", "" + numberOfRecipes);
-        parameters.put("offset", ""+ offset);
-        String data = fetch(SEARCH_URL, GET, parameters, apiKey);
-        JsonObject jsonObject = new JsonParser().parse(data).getAsJsonObject();
-        return getFoodResultDTOList(LIST_OF_FOOD_PROPERTIES_SEARCH, jsonObject);
-    }
-
     public RecipeDTOList complexSearch(Search search) {
         String data = complexFetch(SEARCH_URL,GET,search,apiKey);
         JsonObject jsonObject = new JsonParser().parse(data).getAsJsonObject();

@@ -22,7 +22,7 @@ public enum SearchParameterKey {
     ADD_RECIPE_INFORMATION("addRecipeInformation"),
     ADD_RECIPE_NUTRITION("addRecipeNutrition"),
     MAX_READY_TIME("maxReadyTime"),
-    
+
     // Equipment
     EQUIPMENT("equipment");
 
