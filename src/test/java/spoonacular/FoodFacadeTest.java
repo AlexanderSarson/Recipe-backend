@@ -13,18 +13,20 @@ import org.junit.jupiter.api.Test;
 import session.Search;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Disabled;
 
 public class FoodFacadeTest {
 
     private static final FoodFacade FOODFACADE = new FoodFacade();
 
+    
     @Test
     void test_searchByName() {
         Search search = new Search();
         String title = "Falafel Burgers with Feta Cucumber Sauce";
-        search.addParameter("titleMatch",title);
-        search.addParameter("offset","0");
-        search.addParameter("number","1");
+        search.addParameter("titleMatch", title);
+        search.addParameter("offset", "0");
+        search.addParameter("number", "1");
 
         RecipeDTOList results = FOODFACADE.complexSearch(search);
         assertEquals(1, results.getResults().size());
@@ -33,17 +35,19 @@ public class FoodFacadeTest {
         assertEquals("Falafel Burgers with Feta Cucumber Sauce", result.getTitle());
         assertEquals(492564, result.getId());
     }
+
     
     @Test
     public void test_getRecipeById() {
-        long expected = 324694  ;//716429;
+        long expected = 324694;//716429;
         RecipeDTO recipe = FOODFACADE.getRecipeById(expected);
         long result = recipe.getId();
         assertEquals(expected, result);
     }
 
+    
     @Test
-    public void test_getInstructionsByRecipeId(){
+    public void test_getInstructionsByRecipeId() {
         long recipeId = 324694;
         int expectedNumberOfInstructions = 2;
         List<InstructionsDTO> result = FOODFACADE.getInstructionsByRecipeId(recipeId);
@@ -57,6 +61,7 @@ public class FoodFacadeTest {
         assertEquals(expectedRecipes, results.getResults().size());
     }
 
+    
     @Test
     public void test_recipeParser() {
         List<String> listOfExpectedProperties = new ArrayList<>();
@@ -73,22 +78,24 @@ public class FoodFacadeTest {
         assertEquals(expectedTitle, resultDTO.getTitle());
     }
 
+    
     @Test
     public void test_autoCompleteIngredient_with_some_returned_results() {
         int numberOfResults = 5;
         String partialMatch = "app";
         List<String> listOfExpectedNames = List.of("apple", "applesauce", "apple juice", "apple cider", "apple jelly");
-        List<FoodIngredientDTO> ingredients = FOODFACADE.autoCompleteIngredient(partialMatch,numberOfResults);
+        List<FoodIngredientDTO> ingredients = FOODFACADE.autoCompleteIngredient(partialMatch, numberOfResults);
         ingredients.forEach(ingredient -> {
             assertTrue(listOfExpectedNames.contains(ingredient.getName()));
         });
     }
+
     
     @Test
     public void test_autoCompleteIngredient_without_returned_results() {
         int numberOfResults = 5;
         String partialMatch = "askdklajdjakldjakljdkljalkdjklajd"; // This should not get a match
-        List<FoodIngredientDTO> ingredients = FOODFACADE.autoCompleteIngredient(partialMatch,numberOfResults);
+        List<FoodIngredientDTO> ingredients = FOODFACADE.autoCompleteIngredient(partialMatch, numberOfResults);
         assertTrue(ingredients.isEmpty());
     }
 }
