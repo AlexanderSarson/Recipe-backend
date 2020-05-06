@@ -42,8 +42,10 @@ import javax.ws.rs.core.MediaType;
                 contact = @Contact(name = "Gruppe 2", email = "gruppe2@cphbusiness.dk")
         ),
         tags = {
-            @Tag(name = "recipe", description = "API related to recipes"),
-            @Tag(name = "login", description = "API related to Login"),},
+            @Tag(name = "Recipe", description = "API related to recipes"),
+            @Tag(name = "Login", description = "API related to Login"),
+            @Tag(name = "User", description = "API related to User")
+        },
         servers = {
             @Server(
                     description = "For Local host testing",
@@ -76,7 +78,7 @@ public class RecipeResource {
      * @return an instance of java.lang.String
      */
     @Operation(summary = "Search for recipes, given a part of a full title of the recipe",
-            tags = {"search"},
+            tags = {"Recipe"},
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecipeDTOList.class))),
@@ -126,7 +128,7 @@ public class RecipeResource {
     }
 
     @Operation(summary = "Get x random number of recipes",
-            tags = {"random"},
+            tags = {"Recipe"},
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecipeDTOList.class))),
@@ -141,7 +143,7 @@ public class RecipeResource {
     }
     
     @Operation(summary = "Get recipe by id",
-            tags = {"random"},
+            tags = {"Recipe"},
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecipeDTOList.class))),
