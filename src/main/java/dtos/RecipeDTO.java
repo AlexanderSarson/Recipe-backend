@@ -59,7 +59,7 @@ public class RecipeDTO {
                 this.veryHealthy = value.toString().contains("true");
                 break;
             case "image":
-                this.image = value.toString().replace("\"", "");
+                this.image = value == null ? "No image" : value.toString().replace("\"", "");
                 break;
             case "imageUrls":
                 this.imageUrls = (List<String>) value;
