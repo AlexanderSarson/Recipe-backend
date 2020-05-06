@@ -42,8 +42,11 @@ import javax.ws.rs.core.MediaType;
                 contact = @Contact(name = "Gruppe 2", email = "gruppe2@cphbusiness.dk")
         ),
         tags = {
-            @Tag(name = "recipe", description = "API related to recipes"),
-            @Tag(name = "login", description = "API related to Login"),},
+            @Tag(name = "recipe", description = "API related to Recipes"),
+            @Tag(name = "login", description = "API related to Login"),
+            @Tag(name = "Ingredient AutoComplete", description = "API Related to Ingredients"),
+            @Tag(name = "user", description = "API related to user Info")
+        },
         servers = {
             @Server(
                     description = "For Local host testing",
