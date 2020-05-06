@@ -10,18 +10,12 @@ import com.google.gson.JsonParser;
 import dtos.UserDto;
 import dtos.favourites.FavouriteRecipeDTO;
 import dtos.favourites.FavouriteRecipeDtoList;
-import entity.User;
 import errorhandling.RecipeException;
 import errorhandling.UserException;
 import facades.UserFacade;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.info.Contact;
-import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.media.Content;
 
 import utils.EMF_Creator;
@@ -30,38 +24,13 @@ import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import javax.ws.rs.core.Response;
-import java.util.List;
 
-@OpenAPIDefinition(
-        info = @Info(
-                title = "User API",
-                version = "0.1",
-                description = "Simple API to add or remove recipes from favourites, or get all favourite recipes from a user",
-                contact = @Contact(name = "Team Gold", email = "team-gold@cphbusiness.dk")
-        ),
-        tags = {
-                @Tag(name = "user", description = "API related to user Info")
-
-        },
-        servers = {
-                @Server(
-                        description = "For Local host testing",
-                        url = "http://localhost:8080/recipe-backend"
-                ),
-                @Server(
-                        description = "Server API",
-                        url = "https://www.sarson.codes/recipe-backend"
-                )
-
-        }
-)
 @Path("/user")
 public class UserResource {
 

@@ -2,6 +2,7 @@ package spoonacular;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import dtos.FoodIngredientDTO;
 import dtos.RecipeDTO;
 import dtos.RecipeDTOList;
 import dtos.InstructionsDTO;
@@ -65,5 +66,24 @@ public class FoodFacadeTest {
 
         assertEquals(expectedId, (Long) resultDTO.getId());
         assertEquals(expectedTitle, resultDTO.getTitle());
+    }
+
+    @Test
+    public void test_autoCompleteIngredient_with_some_returned_results() {
+        int numberOfResults = 5;
+        String partialMatch = "app";
+        List<String> listOfExpectedNames = List.of("apple", "applesauce", "apple juice", "apple cider", "apple jelly");
+        List<FoodIngredientDTO> ingredients = FOODFACADE.autoCompleteIngredient(partialMatch,numberOfResults);
+        ingredients.forEach(ingredient -> {
+            assertTrue(listOfExpectedNames.contains(ingredient.getName()));
+        });
+    }
+    
+    @Test
+    public void test_autoCompleteIngredient_without_returned_results() {
+        int numberOfResults = 5;
+        String partialMatch = "askdklajdjakldjakljdkljalkdjklajd"; // This should not get a match
+        List<FoodIngredientDTO> ingredients = FOODFACADE.autoCompleteIngredient(partialMatch,numberOfResults);
+        assertTrue(ingredients.isEmpty());
     }
 }
