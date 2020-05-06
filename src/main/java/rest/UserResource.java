@@ -10,18 +10,12 @@ import com.google.gson.JsonParser;
 import dtos.UserDto;
 import dtos.favourites.FavouriteRecipeDTO;
 import dtos.favourites.FavouriteRecipeDtoList;
-import entity.User;
 import errorhandling.RecipeException;
 import errorhandling.UserException;
 import facades.UserFacade;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.info.Contact;
-import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.media.Content;
 
 import utils.EMF_Creator;

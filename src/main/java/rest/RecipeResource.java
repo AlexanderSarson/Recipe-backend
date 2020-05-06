@@ -44,7 +44,8 @@ import javax.ws.rs.core.MediaType;
         tags = {
             @Tag(name = "Recipe", description = "API related to recipes"),
             @Tag(name = "Login", description = "API related to Login"),
-            @Tag(name = "User", description = "API related to User")
+            @Tag(name = "User", description = "API related to User"),
+            @Tag(name = "Ingredient", description = "API Related to Ingredients"),
         },
         servers = {
             @Server(

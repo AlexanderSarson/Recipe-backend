@@ -27,8 +27,9 @@ public class FoodFacade {
     private static final String BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com";
     private static final String SEARCH_URL = BASE_URL + "/recipes/complexSearch";
     private static final String RANDOM_URL = BASE_URL + "/recipes/random";
+    private static final String AUTOCOMPLETE_INGREDIENT = BASE_URL + "/food/ingredients/autocomplete";
     private static final List<String> LIST_OF_FOOD_PROPERTIES_DETAILED = Arrays.asList("id", "title", "servings", "readyInMinutes", "cuisines", "dairyFree", "glutenFree", "vegan", "vegetarian", "veryHealthy", "dishTypes", "extendedIngredients", "summary");
-    private static final List<String> LIST_OF_FOOD_PROPERTIES_RANDOM = Arrays.asList("id", "title", "servings", "readyInMinutes", "summary");
+    private static final List<String> LIST_OF_FOOD_PROPERTIES_RANDOM = Arrays.asList("id", "title", "servings", "readyInMinutes", "summary", "image", "dairyFree", "glutenFree", "vegan", "vegetarian", "veryHealthy");
     private static final List<String> LIST_OF_FOOD_PROPERTIES_SEARCH = Arrays.asList("id", "title", "image");
 
     private Gson gson = new GsonBuilder()
@@ -63,7 +64,6 @@ public class FoodFacade {
         JsonObject jsonObject = new JsonParser().parse(data).getAsJsonObject();
         return getFoodResultDTOList(LIST_OF_FOOD_PROPERTIES_SEARCH, jsonObject);
     }
-
 
     /**
      * Gets a detailed recipe by id with instructions
@@ -106,6 +106,21 @@ public class FoodFacade {
         String data = fetch(RANDOM_URL, GET, parameters, apiKey);
         JsonObject jsonObject = new JsonParser().parse(data).getAsJsonObject();
         return getFoodResultDTOList(LIST_OF_FOOD_PROPERTIES_RANDOM, jsonObject);
+    }
+
+    /**
+     * Tries to find matching ingredients base on the partial match
+     * @param partialMatch the match, with which to find ingredients
+     * @param number the number of returned results.
+     * @return A List of FoodIngredientDTOs.
+     */
+    public List<FoodIngredientDTO> autoCompleteIngredient(String partialMatch, int number) {
+        Map<String,String> parameters = new HashMap<>();
+        parameters.put("query", partialMatch);
+        parameters.put("number", ""+number);
+        String data = fetch(AUTOCOMPLETE_INGREDIENT, GET, parameters, apiKey);
+        JsonArray jsonArray = new JsonParser().parse(data).getAsJsonArray();
+        return ingredientsParser(jsonArray);
     }
 
     /**
@@ -178,11 +193,14 @@ public class FoodFacade {
         List<FoodIngredientDTO> ingredients = new ArrayList<>();
         jsonIngredients.forEach(ingredient -> {
             FoodIngredientDTO foodIngredient = new FoodIngredientDTO();
-            foodIngredient.setId(ingredient.getAsJsonObject().get("id").getAsLong());
-            foodIngredient.setName(ingredient.getAsJsonObject().get("name").getAsString());
+            JsonElement id = ingredient.getAsJsonObject().get("id");
+            if(id != null)
+                foodIngredient.setId(id.getAsLong());
+            JsonElement name = ingredient.getAsJsonObject().get("name");
+            if(name != null)
+                foodIngredient.setName(name.getAsString());
             ingredients.add(foodIngredient);
         });
         return ingredients;
     }
-
 }
