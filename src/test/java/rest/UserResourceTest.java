@@ -97,11 +97,6 @@ public class UserResourceTest {
     }
 
     @Test
-    public void testServerIsUp() {
-        given().when().get("/user").then().statusCode(200);
-    }
-
-    @Test
     public void testAddFavourite() {
         String username = u1.getUserName();
         FavouriteRecipeDTO favdto = new FavouriteRecipeDTO(1234L, "Pancake", "someImgUrl", 45, 2);
