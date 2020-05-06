@@ -43,6 +43,21 @@ public class RecipeDTO {
             case "id":
                 this.id = Long.parseLong(value.toString());
                 break;
+            case "dairyFree":
+                this.dairyFree = value.toString().contains("true");
+                break;
+            case "glutenFree":
+                this.glutenFree = value.toString().contains("true");
+                break;
+            case "vegan":
+                this.vegan = value.toString().contains("true");
+                break;
+            case "vegetarian":
+                this.vegetarian = value.toString().contains("true");
+                break;
+            case "veryHealthy":
+                this.veryHealthy = value.toString().contains("true");
+                break;
             case "image":
                 this.image = value.toString().replace("\"", "");
                 break;

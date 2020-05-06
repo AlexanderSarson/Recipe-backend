@@ -29,7 +29,7 @@ public class FoodFacade {
     private static final String RANDOM_URL = BASE_URL + "/recipes/random";
     private static final String AUTOCOMPLETE_INGREDIENT = BASE_URL + "/food/ingredients/autocomplete";
     private static final List<String> LIST_OF_FOOD_PROPERTIES_DETAILED = Arrays.asList("id", "title", "servings", "readyInMinutes", "cuisines", "dairyFree", "glutenFree", "vegan", "vegetarian", "veryHealthy", "dishTypes", "extendedIngredients", "summary");
-    private static final List<String> LIST_OF_FOOD_PROPERTIES_RANDOM = Arrays.asList("id", "title", "servings", "readyInMinutes", "summary");
+    private static final List<String> LIST_OF_FOOD_PROPERTIES_RANDOM = Arrays.asList("id", "title", "servings", "readyInMinutes", "summary", "image", "dairyFree", "glutenFree", "vegan", "vegetarian", "veryHealthy");
     private static final List<String> LIST_OF_FOOD_PROPERTIES_SEARCH = Arrays.asList("id", "title", "image");
 
     private Gson gson = new GsonBuilder()
