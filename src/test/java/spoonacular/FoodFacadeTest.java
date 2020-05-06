@@ -7,6 +7,7 @@ import dtos.RecipeDTOList;
 import dtos.InstructionsDTO;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import session.Search;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,8 +17,13 @@ public class FoodFacadeTest {
 
     @Test
     void test_searchByName() {
-        String search = "Falafel Burgers with Feta Cucumber Sauce";
-        RecipeDTOList results = FOODFACADE.searchByName(search, 1,0);
+        Search search = new Search();
+        String title = "Falafel Burgers with Feta Cucumber Sauce";
+        search.addParameter("titleMatch",title);
+        search.addParameter("offset","0");
+        search.addParameter("number","1");
+
+        RecipeDTOList results = FOODFACADE.complexSearch(search);
         assertEquals(1, results.getResults().size());
         RecipeDTO result = results.getResults().get(0);
 

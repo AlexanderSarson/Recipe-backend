@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import session.Search;
 import session.SessionOffsetManager;
 import spoonacular.FoodFacade;
 
@@ -85,9 +86,9 @@ public class RecipeResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response searchForRecipe(String json) {
-        // Get data from the post request.
+        // Create a Search from the object.
         JsonObject object = new JsonParser().parse(json).getAsJsonObject();
-        String search = object.get("name").getAsString();
+        Search search = Search.searchFromJsonObject(object);
         int number = object.get("number").getAsInt();
 
         JsonElement sessionIdElement = object.get("sessionId");
@@ -95,33 +96,31 @@ public class RecipeResource {
         if(sessionIdElement != null)
             sessionId = sessionIdElement.getAsString();
 
-        int sessionOffset = getSessionOffset(sessionId, object, search, number);
+        int sessionOffset = getSessionOffset(sessionId, object, search.toString(), number);
+        search.addParameter("offset",""+sessionOffset);
 
-        // Return data, fetched using both the limiting number and the offset.
-        return Response
-                .ok(foodFacade.searchByName(search, number, sessionOffset))
-                .build();
+        return Response.ok(foodFacade.complexSearch(search)).build();
     }
 
     /**
      * This will handle all of the offset correction needed.
      * @param sessionId the sessionId of the current request.
      * @param object The POSTed object.
-     * @param search the searched recipe
+     * @param completeSearchString the searched recipe
      * @param number the number of elements to fetch.
      * @return A Integer offset.
      */
-    private int getSessionOffset(String sessionId, JsonObject object, String search, int number) {
-        int sessionOffset = SessionOffsetManager.getSessionOffset(sessionId,search);
+    private int getSessionOffset(String sessionId, JsonObject object, String completeSearchString, int number) {
+        int sessionOffset = SessionOffsetManager.getSessionOffset(sessionId,completeSearchString);
         JsonElement offsetMove = object.get("moveOffset");
         if(offsetMove != null && offsetMove.getAsString().equals("forward")) {
-            SessionOffsetManager.setSessionOffset(sessionId,search,sessionOffset+number);
+            SessionOffsetManager.setSessionOffset(sessionId,completeSearchString,sessionOffset+number);
         } else if(offsetMove != null && offsetMove.getAsString().equals("backward")) {
             sessionOffset = Math.min(0, sessionOffset-(number*2));
-            SessionOffsetManager.setSessionOffset(sessionId,search,sessionOffset);
+            SessionOffsetManager.setSessionOffset(sessionId,completeSearchString,sessionOffset);
         } else {
             sessionOffset = 0;
-            SessionOffsetManager.setSessionOffset(sessionId,search,sessionOffset+number);
+            SessionOffsetManager.setSessionOffset(sessionId,completeSearchString,sessionOffset+number);
         }
         return sessionOffset;
     }
