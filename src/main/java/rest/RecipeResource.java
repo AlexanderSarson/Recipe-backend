@@ -12,6 +12,7 @@ import com.google.gson.JsonParser;
 import dtos.RecipeDTOList;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,14 +32,13 @@ import javax.ws.rs.core.MediaType;
 
 /**
  * REST Web Service
- *
  * @author root
  */
 @OpenAPIDefinition(
         info = @Info(
-                title = "Recipe API",
-                version = "0.1",
-                description = "This API is use as a base for building a backend for a separate Frontend",
+                title = "Recipium API",
+                version = "0.2",
+                description = "This API is used for fetching recipes, ingredients and handling user creation and user login",
                 contact = @Contact(name = "Gruppe 2", email = "gruppe2@cphbusiness.dk")
         ),
         tags = {
@@ -61,8 +61,8 @@ import javax.ws.rs.core.MediaType;
 @Path("recipe")
 public class RecipeResource {
 
-    private FoodFacade foodFacade = new FoodFacade();
-    private Gson gson = new Gson();
+    private final FoodFacade foodFacade = new FoodFacade();
+    private final Gson gson = new Gson();
 
     @Context
     private UriInfo context;
@@ -75,7 +75,6 @@ public class RecipeResource {
 
     /**
      * Retrieves representation of an instance of rest.RecipeResource
-     *
      * @return an instance of java.lang.String
      */
     @Operation(summary = "Search for recipes, given a part of a full title of the recipe",
@@ -88,7 +87,12 @@ public class RecipeResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response searchForRecipe(String json) {
+    public Response searchForRecipe(
+            @Parameter(
+                    description = "Object with all parameters for performing a search",
+                    required = true,
+                    schema = @Schema(example = "{\"name\":\"falafel\",\"includeIngredients\":\"bacon,cheese,onion\",\"excludeIngredients\":\"lemon,flour\",\"offset\":0,\"number\":10,\"sessionId:\"2Ax1jf31\"}")
+            )String json) {
         // Create a Search from the object.
         JsonObject object = new JsonParser().parse(json).getAsJsonObject();
         Search search = Search.searchFromJsonObject(object);
@@ -105,30 +109,7 @@ public class RecipeResource {
         return Response.ok(foodFacade.complexSearch(search)).build();
     }
 
-    /**
-     * This will handle all of the offset correction needed.
-     * @param sessionId the sessionId of the current request.
-     * @param object The POSTed object.
-     * @param completeSearchString the searched recipe
-     * @param number the number of elements to fetch.
-     * @return A Integer offset.
-     */
-    private int getSessionOffset(String sessionId, JsonObject object, String completeSearchString, int number) {
-        int sessionOffset = SessionOffsetManager.getSessionOffset(sessionId,completeSearchString);
-        JsonElement offsetMove = object.get("moveOffset");
-        if(offsetMove != null && offsetMove.getAsString().equals("forward")) {
-            SessionOffsetManager.setSessionOffset(sessionId,completeSearchString,sessionOffset+number);
-        } else if(offsetMove != null && offsetMove.getAsString().equals("backward")) {
-            sessionOffset = Math.min(0, sessionOffset-(number*2));
-            SessionOffsetManager.setSessionOffset(sessionId,completeSearchString,sessionOffset);
-        } else {
-            sessionOffset = 0;
-            SessionOffsetManager.setSessionOffset(sessionId,completeSearchString,sessionOffset+number);
-        }
-        return sessionOffset;
-    }
-
-    @Operation(summary = "Get x random number of recipes",
+    @Operation(summary = "Get a number of random recipes",
             tags = {"Recipe"},
             responses = {
                 @ApiResponse(
@@ -156,4 +137,26 @@ public class RecipeResource {
         return gson.toJson(foodFacade.getRecipeById(id));
     }
 
+    /**
+     * This will handle all of the offset correction needed.
+     * @param sessionId the sessionId of the current request.
+     * @param object The POSTed object.
+     * @param completeSearchString the searched recipe
+     * @param number the number of elements to fetch.
+     * @return A Integer offset.
+     */
+    private int getSessionOffset(String sessionId, JsonObject object, String completeSearchString, int number) {
+        int sessionOffset = SessionOffsetManager.getSessionOffset(sessionId,completeSearchString);
+        JsonElement offsetMove = object.get("moveOffset");
+        if(offsetMove != null && offsetMove.getAsString().equals("forward")) {
+            SessionOffsetManager.setSessionOffset(sessionId,completeSearchString,sessionOffset+number);
+        } else if(offsetMove != null && offsetMove.getAsString().equals("backward")) {
+            sessionOffset = Math.min(0, sessionOffset-(number*2));
+            SessionOffsetManager.setSessionOffset(sessionId,completeSearchString,sessionOffset);
+        } else {
+            sessionOffset = 0;
+            SessionOffsetManager.setSessionOffset(sessionId,completeSearchString,sessionOffset+number);
+        }
+        return sessionOffset;
+    }
 }

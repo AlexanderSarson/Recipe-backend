@@ -15,7 +15,7 @@ import javax.ws.rs.core.UriInfo;
 
 @Path("ingredient")
 public class IngredientResource {
-        private FoodFacade foodFacade = new FoodFacade();
+        private final FoodFacade foodFacade = new FoodFacade();
 
         private static final int NUMBER_OF_RESULTS = 30;
         @Context
@@ -27,7 +27,7 @@ public class IngredientResource {
                 tags = {"Ingredient"},
                 responses = {
                         @ApiResponse(
-                                content = @Content(mediaType = "application/json", schema = @Schema(implementation = FoodIngredientDTO[].class))),
+                                content = @Content(mediaType = "application/json", schema = @Schema(example = "[{\"id\":0,\"name\":\"apple\"},{\"id\":0,\"name\":\"applesauce\"}, ...]"))),
                         @ApiResponse(responseCode = "200", description = "The found recipes")})
         @Path("/autocomplete/{query}")
         @GET
