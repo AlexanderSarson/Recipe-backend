@@ -29,6 +29,7 @@ import javax.persistence.EntityManagerFactory;
 import errorhandling.UserException;
 import facades.UserFacade;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -43,16 +44,22 @@ public class LoginEndpoint {
   public static final UserFacade USER_FACADE = UserFacade.getUserFacade(EMF);
 
   @Operation(summary = "Log in to an account, given a username and a corresponding password",
-    tags = {"login"},
+    tags = {"Login"},
     responses = {
     @ApiResponse(
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(example = "{username:\"aUserName\",token:\"kjhashjAJKJKDHAJKDa1231n1\"}"))),
             @ApiResponse(responseCode = "200", description = "The Requested login, returning with username and a token"),
             @ApiResponse(responseCode = "403", description = "Invalid username or password! Please try again")})
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response login(String jsonString) throws AuthenticationException {
+  public Response login(
+          @Parameter(
+                  description = "Object with username and password",
+                  required = true,
+                  schema = @Schema(example = "{username:\"aUserName\",password:\"a very secure password\"}")
+          )
+          String jsonString) throws AuthenticationException {
     JsonObject json = new JsonParser().parse(jsonString).getAsJsonObject();
     String username = json.get("username").getAsString();
     String password = json.get("password").getAsString();
@@ -75,17 +82,22 @@ public class LoginEndpoint {
   }
 
   @Operation(summary = "Create a regular user",
-          tags = {"login"},
+          tags = {"Login"},
           responses = {
                   @ApiResponse(
-                          content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+                          content = @Content(mediaType = "application/json", schema = @Schema(example = "{username:\"aUserName\",token:\"kjhashjAJKJKDHAJKDa1231n1\"}"))),
                   @ApiResponse(responseCode = "200", description = "Successful creation, returning with username and a token"),
                   @ApiResponse(responseCode = "406", description = UserException.IN_USE_USERNAME)})
   @POST
   @Path("/create")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response create(String jsonString) throws UserException {
+  public Response create(
+          @Parameter(
+                  description = "Object with username and password",
+                  required = true,
+                  schema = @Schema(example = "{username:\"aUserName\",password:\"a very secure password\"}")
+          ) String jsonString) throws UserException {
     JsonObject json = new JsonParser().parse(jsonString).getAsJsonObject();
     try {
       String username = json.get("username").getAsString();
@@ -102,7 +114,6 @@ public class LoginEndpoint {
   }
 
   private String createToken(String userName, List<String> roles) throws JOSEException {
-
     StringBuilder res = new StringBuilder();
     for (String string : roles) {
       res.append(string);

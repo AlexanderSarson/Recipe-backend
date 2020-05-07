@@ -27,7 +27,6 @@ abstract public class BaseResourceTest {
     protected static EntityManagerFactory emf;
 
     protected static Properties testProps = new Properties();
-    protected static Map<String,String> userInfo = new HashMap<>();
 
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -37,22 +36,17 @@ abstract public class BaseResourceTest {
     @BeforeAll
     public static void setUpClass() throws IOException {
         EMF_Creator.startREST_TestWithDB();
-        emf = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.TEST, EMF_Creator.Strategy.CREATE);
+        emf = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.TEST, EMF_Creator.Strategy.DROP_AND_CREATE);
 
         httpServer = startServer();
         RestAssured.baseURI = SERVER_URL;
         RestAssured.port = SERVER_PORT;
         RestAssured.defaultParser = Parser.JSON;
-        //testProps.load(JokeResourceTest.class.getClassLoader().getResourceAsStream("testing.properties"));
     }
 
     @AfterAll
     public static void closeTestServer() {
         EMF_Creator.endREST_TestWithDB();
         httpServer.shutdownNow();
-    }
-
-    @BeforeEach
-    public void setUp() {
     }
 }

@@ -1,6 +1,5 @@
 package rest;
 
-import dtos.FoodIngredientDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,7 +14,7 @@ import javax.ws.rs.core.UriInfo;
 
 @Path("ingredient")
 public class IngredientResource {
-        private FoodFacade foodFacade = new FoodFacade();
+        private final FoodFacade foodFacade = new FoodFacade();
 
         private static final int NUMBER_OF_RESULTS = 30;
         @Context
@@ -24,10 +23,10 @@ public class IngredientResource {
         }
 
         @Operation(summary = "Tries to autocomplete a given string to an ingredient",
-                tags = {"Ingredient AutoComplete"},
+                tags = {"Ingredient"},
                 responses = {
                         @ApiResponse(
-                                content = @Content(mediaType = "application/json", schema = @Schema(implementation = FoodIngredientDTO[].class))),
+                                content = @Content(mediaType = "application/json", schema = @Schema(example = "[{\"id\":0,\"name\":\"apple\"},{\"id\":0,\"name\":\"applesauce\"}, ...]"))),
                         @ApiResponse(responseCode = "200", description = "The found recipes")})
         @Path("/autocomplete/{query}")
         @GET

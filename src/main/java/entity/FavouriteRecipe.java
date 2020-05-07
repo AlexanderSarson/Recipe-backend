@@ -51,7 +51,7 @@ public class FavouriteRecipe implements Serializable {
     public FavouriteRecipe (FavouriteRecipeDTO dto) {
         this.id = dto.getId();
         this.title = dto.getTitle();
-        this.imgUrl = dto.getImgUrl();
+        this.imgUrl = dto.getImage();
         this.readyInMinutes = dto.getReadyInMinutes();
         this.servings = dto.getServings();
     }

@@ -14,6 +14,7 @@ import errorhandling.RecipeException;
 import errorhandling.UserException;
 import facades.UserFacade;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -37,14 +38,8 @@ public class UserResource {
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.CREATE);
     public static final UserFacade USER_FACADE = UserFacade.getUserFacade(EMF);
 
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response get() {
-        return Response.ok().build();
-    }
     @Operation(summary = "Add or remove a favourite recipe to/from a users favourite recipe list",
-    tags = {"user"},
+    tags = {"User"},
             responses = {
             @ApiResponse(
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
@@ -54,7 +49,12 @@ public class UserResource {
     @Path("favourites")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response addToFavourite(String jsonString) throws UserException, RecipeException {
+    public Response addToFavourite(
+            @Parameter(
+                    description = "Object with username and the recipe object",
+                    required = true,
+                    schema = @Schema(example = "{username:\"aUserName\",recipe:{id:1,title:\"aTitle\",imgUrl:\"www.someUrlToTheImg.com\",readyInMinutes:20,servings:20}}")
+            )String jsonString) throws UserException, RecipeException {
         JsonObject json = new JsonParser().parse(jsonString).getAsJsonObject();
         // Gets the username from the body
         String username = json.get("username").getAsString();
@@ -64,9 +64,9 @@ public class UserResource {
         String action = json.get("action").getAsString();
 
         UserDto user;
-        if (action.toLowerCase().equals("add")) {
+        if (action.equalsIgnoreCase("add")) {
             user = USER_FACADE.addFavourite(username, favouriteRecipeDTO);
-        } else if (action.toLowerCase().equals("remove")) {
+        } else if (action.equalsIgnoreCase("remove")) {
             user = USER_FACADE.removeFavourite(username, favouriteRecipeDTO);
         } else {
             return Response.serverError().build();
@@ -76,10 +76,10 @@ public class UserResource {
     }
 
     @Operation(summary = "Get all favourite recipes from username",
-            tags = {"user"},
+            tags = {"User"},
             responses = {
                     @ApiResponse(
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = FavouriteRecipeDtoList.class))),
                     @ApiResponse(responseCode = "200", description = "The requested favourite recipes"),
                     @ApiResponse(responseCode="400", description = "User not found")})
     @GET

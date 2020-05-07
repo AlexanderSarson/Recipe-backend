@@ -7,8 +7,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class HttpUtils {
+    private static final Logger logger = Logger.getLogger(HttpUtils.class.getName());
+
+    private HttpUtils() {}
     /**
      * Fetches data from the given URL and returns the result as a string.
      * @param fetchUrl The URL to fetch from
@@ -46,8 +51,7 @@ public class HttpUtils {
                 jsonResponse = scanner.nextLine();
             }
         } catch (IOException e) {
-            // TODO(Benjamin): Logging on these exceptions?
-            e.printStackTrace();
+            logger.log(Level.SEVERE,e.getMessage());
         }
         return jsonResponse;
     }
@@ -55,10 +59,8 @@ public class HttpUtils {
 
 
     public static String prepareUrl(String baseUrl, Map<String,String> parameters) {
-        boolean hasParameters = false;
         String completeUrl = baseUrl;
         if(parameters != null) {
-            hasParameters = true;
             completeUrl += generateParameters(parameters);
         }
         return completeUrl;
@@ -82,9 +84,10 @@ public class HttpUtils {
         StringBuilder parametersBuilder = new StringBuilder();
         parametersBuilder.append("?");
         int count = 0;
-        for(String parameterKey: parameters.keySet()) {
-            String value = parameters.get(parameterKey);
-            parametersBuilder.append(parameterKey).append("=").append(value);
+        for (Map.Entry<String,String> entry : parameters.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            parametersBuilder.append(key).append("=").append(value);
             if(count++ < parameters.size()-1) {
                 parametersBuilder.append("&");
             }
