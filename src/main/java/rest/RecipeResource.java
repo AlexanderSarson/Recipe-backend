@@ -68,12 +68,6 @@ public class RecipeResource {
     private UriInfo context;
 
     /**
-     * Creates a new instance of RecipeResource
-     */
-    public RecipeResource() {
-    }
-
-    /**
      * Retrieves representation of an instance of rest.RecipeResource
      * @return an instance of java.lang.String
      */
