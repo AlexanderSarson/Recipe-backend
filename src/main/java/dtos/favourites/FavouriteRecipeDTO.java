@@ -7,14 +7,17 @@ import entity.FavouriteRecipe;
 public class FavouriteRecipeDTO {
     private Long id;
     private String title;
-    private String imgUrl;
+    private String image;
     private Integer readyInMinutes;
     private Integer servings;
 
-    public FavouriteRecipeDTO (Long id, String title, String imgUrl, Integer readyInMinutes, Integer servings) {
+    public FavouriteRecipeDTO() {
+    }
+
+    public FavouriteRecipeDTO (Long id, String title, String image, Integer readyInMinutes, Integer servings) {
         this.id = id;
         this.title = title;
-        this.imgUrl = imgUrl;
+        this.image = image;
         this.readyInMinutes = readyInMinutes;
         this.servings = servings;
     }
@@ -22,7 +25,7 @@ public class FavouriteRecipeDTO {
     public FavouriteRecipeDTO (FavouriteRecipe favouriteRecipe) {
         this.id = favouriteRecipe.getId();
         this.title = favouriteRecipe.getTitle();
-        this.imgUrl = favouriteRecipe.getImgUrl();
+        this.image = favouriteRecipe.getImgUrl();
         this.readyInMinutes = favouriteRecipe.getReadyInMinutes();
         this.servings = favouriteRecipe.getServings();
     }
@@ -43,12 +46,12 @@ public class FavouriteRecipeDTO {
         this.title = title;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getImage() {
+        return image;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Integer getReadyInMinutes() {
