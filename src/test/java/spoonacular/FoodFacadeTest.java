@@ -93,4 +93,19 @@ public class FoodFacadeTest {
         List<FoodIngredientDTO> ingredients = FOODFACADE.autoCompleteIngredient(partialMatch, numberOfResults);
         assertTrue(ingredients.isEmpty());
     }
+
+    @Test
+    public void test_sanitizeString_with_a_safe_string() {
+        String input = "apple juice";
+        String output = FOODFACADE.sanitizeString(input);
+        assertEquals(input,output);
+    }
+
+    @Test
+    public void test_sanitizeString_with_an_unsafe_string() {
+        String input = "apple?--=!0768¤¤#¤()/#sauce";
+        String expected = "applesauce";
+        String result = FOODFACADE.sanitizeString(input);
+        assertEquals(expected,result);
+    }
 }

@@ -10,6 +10,8 @@ import session.Search;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static utils.HttpUtils.complexFetch;
 import static utils.HttpUtils.fetch;
@@ -109,7 +111,8 @@ public class FoodFacade {
      */
     public List<FoodIngredientDTO> autoCompleteIngredient(String partialMatch, int number) {
         Map<String,String> parameters = new HashMap<>();
-        parameters.put("query", partialMatch);
+        String sanitizedInput = sanitizeString(partialMatch);
+        parameters.put("query", sanitizedInput);
         parameters.put("number", ""+number);
         String data = fetch(AUTOCOMPLETE_INGREDIENT, GET, parameters, apiKey);
         JsonArray jsonArray = new JsonParser().parse(data).getAsJsonArray();
@@ -191,5 +194,15 @@ public class FoodFacade {
             ingredients.add(foodIngredient);
         });
         return ingredients;
+    }
+
+    public String sanitizeString(String input) {
+        String test = "";
+        Pattern pattern = Pattern.compile("[a-zA-Z ]+");
+        Matcher matcher = pattern.matcher(input);
+        while(matcher.find()) {
+            test += matcher.group();
+        }
+        return test;
     }
 }
