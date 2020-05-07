@@ -64,9 +64,9 @@ public class UserResource {
         String action = json.get("action").getAsString();
 
         UserDto user;
-        if (action.toLowerCase().equals("add")) {
+        if (action.equalsIgnoreCase("add")) {
             user = USER_FACADE.addFavourite(username, favouriteRecipeDTO);
-        } else if (action.toLowerCase().equals("remove")) {
+        } else if (action.equalsIgnoreCase("remove")) {
             user = USER_FACADE.removeFavourite(username, favouriteRecipeDTO);
         } else {
             return Response.serverError().build();

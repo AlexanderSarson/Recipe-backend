@@ -1,10 +1,5 @@
 package rest;
 
-import cors.CorsRequestFilter;
-import cors.CorsResponseFilter;
-import errorhandling.AuthenticationExceptionMapper;
-import errorhandling.UserException;
-import errorhandling.UserExceptionMapper;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
 
 import java.util.Set;

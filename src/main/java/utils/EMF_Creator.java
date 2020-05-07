@@ -74,12 +74,12 @@ public class EMF_Creator {
         String user;
         String pw;
         if(dbType == DbSelector.DEV){
-            connection_str = Settings.getDEV_DBConnection();
+            connection_str = Settings.getDEVDBConnection();
             user = Settings.getPropertyValue("db.user");
             pw = Settings.getPropertyValue("db.password");
             System.clearProperty("IS_TEST");
         } else{          
-            connection_str = Settings.getTEST_DBConnection();
+            connection_str = Settings.getTESTDBConnection();
             //Will ensure REST code "switches" to this DB, even when running on a separate JVM
             System.setProperty("IS_TEST", connection_str);
             user = Settings.getPropertyValue("dbtest.user")!= null ? Settings.getPropertyValue("dbtest.user") : Settings.getPropertyValue("db.user") ;
@@ -108,7 +108,7 @@ public class EMF_Creator {
         //A test running on a different JVM can alter values to use via this property
         if (System.getProperty("IS_INTEGRATION_TEST_WITH_DB") != null) {
             System.out.println("--------- IS_INTEGRATION_TEST_WITH_DB (Integration Test With DataBase --------------- ");
-            connection_str = Settings.getTEST_DBConnection();
+            connection_str = Settings.getTESTDBConnection();
             user = System.getProperty("USER") != null ? System.getProperty("USER") : user;
             pw = System.getProperty("PW") != null ? System.getProperty("PW") : pw;
         }

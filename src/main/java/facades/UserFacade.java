@@ -8,7 +8,6 @@ import entity.Role;
 import entity.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
 
 import errorhandling.AuthenticationException;
 import errorhandling.RecipeException;
@@ -25,16 +24,16 @@ public class UserFacade {
     private static EntityManagerFactory emf;
     private static UserFacade instance;
     
-    public UserFacade(){}
+    private UserFacade(){
+    }
     
     /**
-     * 
-     * @param _emf
+     * @param entityManagerFactory
      * @return the instance of this facade.
      */
-    public static UserFacade getUserFacade (EntityManagerFactory _emf) {
+    public static UserFacade getUserFacade (EntityManagerFactory entityManagerFactory) {
         if (instance == null) {
-            emf = _emf;
+            emf = entityManagerFactory;
             instance = new UserFacade();
         }
         return instance;
