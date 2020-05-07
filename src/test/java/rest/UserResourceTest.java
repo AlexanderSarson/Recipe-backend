@@ -121,7 +121,7 @@ public class UserResourceTest {
                 .body("favouriteRecipes", hasSize(1))
                 .body("favouriteRecipes[0].id", equalTo(1234))
                 .body("favouriteRecipes[0].title", equalTo("Pancake"))
-                .body("favouriteRecipes[0].imgUrl", equalTo("someImgUrl"))
+                .body("favouriteRecipes[0].image", equalTo("someImgUrl"))
                 .body("favouriteRecipes[0].readyInMinutes", equalTo(45))
                 .body("favouriteRecipes[0].servings", equalTo(2));
     }
