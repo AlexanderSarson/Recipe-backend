@@ -6,13 +6,12 @@ import dtos.favourites.FavouriteRecipeDtoList;
 import entity.FavouriteRecipe;
 import entity.Role;
 import entity.User;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-
 import errorhandling.AuthenticationException;
 import errorhandling.RecipeException;
 import errorhandling.UserException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 

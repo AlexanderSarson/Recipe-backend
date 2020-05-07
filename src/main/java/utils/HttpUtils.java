@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class HttpUtils {
-    private static final Logger logger = Logger.getLogger(ParallelWorker.class.getName());
+    private static final Logger logger = Logger.getLogger(HttpUtils.class.getName());
 
     private HttpUtils() {}
     /**

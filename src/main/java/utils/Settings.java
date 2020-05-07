@@ -12,7 +12,7 @@ public class Settings {
 
     public static final String PROPERTY_FILE = "config.properties";
     private static Properties props = null;
-    private static final Logger logger = Logger.getLogger(ParallelWorker.class.getName());
+    private static final Logger logger = Logger.getLogger(Settings.class.getName());
 
     private Settings() {}
 

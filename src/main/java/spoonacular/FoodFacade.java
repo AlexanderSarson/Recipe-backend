@@ -2,23 +2,18 @@ package spoonacular;
 
 import com.google.gson.*;
 import dtos.FoodIngredientDTO;
+import dtos.InstructionsDTO;
 import dtos.RecipeDTO;
 import dtos.RecipeDTOList;
-import dtos.InstructionsDTO;
 import session.Search;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import static utils.HttpUtils.complexFetch;
 import static utils.HttpUtils.fetch;
-import static utils.HttpsMethod.*;
+import static utils.HttpsMethod.GET;
 
 public class FoodFacade {
 

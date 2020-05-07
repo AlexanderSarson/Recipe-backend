@@ -2,8 +2,8 @@ package rest;
 
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
 
-import java.util.Set;
 import javax.ws.rs.core.Application;
+import java.util.Set;
 
 /**
  *
