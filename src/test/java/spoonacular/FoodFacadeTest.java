@@ -6,6 +6,8 @@ import dtos.FoodIngredientDTO;
 import dtos.RecipeDTO;
 import dtos.RecipeDTOList;
 import dtos.InstructionsDTO;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import session.Search;
@@ -62,7 +64,10 @@ public class FoodFacadeTest {
     
     @Test
     public void test_recipeParser() {
-        List<String> listOfExpectedProperties = List.of("id", "title", "extendedIngredients");
+        List<String> listOfExpectedProperties = new ArrayList<>();
+        listOfExpectedProperties.add("id");
+        listOfExpectedProperties.add("title");
+        listOfExpectedProperties.add("extendedIngredients");
         JsonObject jsonObject = new JsonParser().parse(RandomResponseRecipes.RANDOM_RESPONSE).getAsJsonObject();
         JsonObject singleRecipe = jsonObject.get("recipes").getAsJsonArray().get(0).getAsJsonObject();
         RecipeDTO resultDTO = FOODFACADE.recipeParser(listOfExpectedProperties, singleRecipe);

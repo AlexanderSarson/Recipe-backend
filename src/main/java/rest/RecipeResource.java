@@ -12,6 +12,7 @@ import com.google.gson.JsonParser;
 import dtos.RecipeDTOList;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,21 +32,20 @@ import javax.ws.rs.core.MediaType;
 
 /**
  * REST Web Service
- *
  * @author root
  */
 @OpenAPIDefinition(
         info = @Info(
-                title = "Recipe API",
-                version = "0.1",
-                description = "This API is use as a base for building a backend for a separate Frontend",
+                title = "Recipium API",
+                version = "0.2",
+                description = "This API is used for fetching recipes, ingredients and handling user creation and user login",
                 contact = @Contact(name = "Gruppe 2", email = "gruppe2@cphbusiness.dk")
         ),
         tags = {
-            @Tag(name = "recipe", description = "API related to Recipes"),
-            @Tag(name = "login", description = "API related to Login"),
-            @Tag(name = "Ingredient AutoComplete", description = "API Related to Ingredients"),
-            @Tag(name = "user", description = "API related to user Info")
+            @Tag(name = "Recipe", description = "API related to recipes"),
+            @Tag(name = "Login", description = "API related to Login"),
+            @Tag(name = "User", description = "API related to User"),
+            @Tag(name = "Ingredient", description = "API Related to Ingredients"),
         },
         servers = {
             @Server(
@@ -61,8 +61,8 @@ import javax.ws.rs.core.MediaType;
 @Path("recipe")
 public class RecipeResource {
 
-    private FoodFacade foodFacade = new FoodFacade();
-    private Gson gson = new Gson();
+    private final FoodFacade foodFacade = new FoodFacade();
+    private final Gson gson = new Gson();
 
     @Context
     private UriInfo context;
@@ -75,11 +75,10 @@ public class RecipeResource {
 
     /**
      * Retrieves representation of an instance of rest.RecipeResource
-     *
      * @return an instance of java.lang.String
      */
     @Operation(summary = "Search for recipes, given a part of a full title of the recipe",
-            tags = {"search"},
+            tags = {"Recipe"},
             responses = {
                 @ApiResponse(
                         content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecipeDTOList.class))),
@@ -88,7 +87,12 @@ public class RecipeResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response searchForRecipe(String json) {
+    public Response searchForRecipe(
+            @Parameter(
+                    description = "Object with all parameters for performing a search",
+                    required = true,
+                    schema = @Schema(example = "{\"name\":\"falafel\",\"includeIngredients\":\"bacon,cheese,onion\",\"excludeIngredients\":\"lemon,flour\",\"offset\":0,\"number\":10,\"sessionId:\"2Ax1jf31\"}")
+            )String json) {
         // Create a Search from the object.
         JsonObject object = new JsonParser().parse(json).getAsJsonObject();
         Search search = Search.searchFromJsonObject(object);
@@ -103,6 +107,34 @@ public class RecipeResource {
         search.addParameter("offset",""+sessionOffset);
 
         return Response.ok(foodFacade.complexSearch(search)).build();
+    }
+
+    @Operation(summary = "Get a number of random recipes",
+            tags = {"Recipe"},
+            responses = {
+                @ApiResponse(
+                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecipeDTOList.class))),
+                @ApiResponse(responseCode = "200", description = "The found random recipes")})
+    @Path("/random/{number}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRandomRecipe(@PathParam("number") int number) {
+        return Response
+                .ok(foodFacade.getRandomRecipes(number))
+                .build();
+    }
+    
+    @Operation(summary = "Get recipe by id",
+            tags = {"Recipe"},
+            responses = {
+                @ApiResponse(
+                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecipeDTOList.class))),
+                @ApiResponse(responseCode = "200", description = "The found recipe")})
+    @Path("/id/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getRecipeById(@PathParam("id") long id) {
+        return gson.toJson(foodFacade.getRecipeById(id));
     }
 
     /**
@@ -127,33 +159,4 @@ public class RecipeResource {
         }
         return sessionOffset;
     }
-
-    @Operation(summary = "Get x random number of recipes",
-            tags = {"random"},
-            responses = {
-                @ApiResponse(
-                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecipeDTOList.class))),
-                @ApiResponse(responseCode = "200", description = "The found random recipes")})
-    @Path("/random/{number}")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getRandomRecipe(@PathParam("number") int number) {
-        return Response
-                .ok(foodFacade.getRandomRecipes(number))
-                .build();
-    }
-    
-    @Operation(summary = "Get recipe by id",
-            tags = {"random"},
-            responses = {
-                @ApiResponse(
-                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecipeDTOList.class))),
-                @ApiResponse(responseCode = "200", description = "The found recipe")})
-    @Path("/id/{id}")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getRecipeById(@PathParam("id") long id) {
-        return gson.toJson(foodFacade.getRecipeById(id));
-    }
-
 }
