@@ -8,7 +8,6 @@ import entity.Role;
 import entity.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
 
 import errorhandling.AuthenticationException;
 import errorhandling.RecipeException;

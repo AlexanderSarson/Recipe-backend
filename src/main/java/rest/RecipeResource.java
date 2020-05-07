@@ -10,6 +10,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dtos.RecipeDTOList;
+import facades.StatisticFacade;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Contact;
@@ -22,7 +23,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import session.Search;
 import session.SessionOffsetManager;
 import spoonacular.FoodFacade;
+import utils.EMF_Creator;
 
+import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -60,8 +63,10 @@ import javax.ws.rs.core.MediaType;
 )
 @Path("recipe")
 public class RecipeResource {
+    private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.CREATE);
 
     private FoodFacade foodFacade = new FoodFacade();
+    private StatisticFacade statisticFacade = StatisticFacade.getStatisticFacade(EMF);
     private Gson gson = new Gson();
 
     @Context
@@ -154,6 +159,18 @@ public class RecipeResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String getRecipeById(@PathParam("id") long id) {
         return gson.toJson(foodFacade.getRecipeById(id));
+    }
+
+    @Operation(summary = "Get Recipes based on popularity",
+            tags = {""}
+    )
+    @Path("/popular")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMostPopular() {
+        return Response
+                .ok(statisticFacade.getMostPopular())
+                .build();
     }
 
 }

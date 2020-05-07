@@ -2,23 +2,21 @@ package spoonacular;
 
 import com.google.gson.*;
 import dtos.FoodIngredientDTO;
+import dtos.InstructionsDTO;
 import dtos.RecipeDTO;
 import dtos.RecipeDTOList;
-import dtos.InstructionsDTO;
 import session.Search;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.time.LocalDate;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
+import java.util.*;
 
 import static utils.HttpUtils.complexFetch;
 import static utils.HttpUtils.fetch;
-import static utils.HttpsMethod.*;
+import static utils.HttpsMethod.GET;
 
 public class FoodFacade {
 
@@ -30,7 +28,12 @@ public class FoodFacade {
     private static final String AUTOCOMPLETE_INGREDIENT = BASE_URL + "/food/ingredients/autocomplete";
     private static final List<String> LIST_OF_FOOD_PROPERTIES_DETAILED = Arrays.asList("id", "title", "servings", "readyInMinutes", "cuisines", "dairyFree", "glutenFree", "vegan", "vegetarian", "veryHealthy", "dishTypes", "extendedIngredients", "summary");
     private static final List<String> LIST_OF_FOOD_PROPERTIES_RANDOM = Arrays.asList("id", "title", "servings", "readyInMinutes", "summary", "image", "dairyFree", "glutenFree", "vegan", "vegetarian", "veryHealthy");
-    private static final List<String> LIST_OF_FOOD_PROPERTIES_SEARCH = Arrays.asList("id", "title", "image");
+    private static final List<String> LIST_OF_FOOD_PROPERTIES_SEARCH = Arrays.asList("id", "title", "image", "cuisines");
+    public static final String[] CUISINES = new String[]
+            {"African","American","British","Cajun","Caribbean","Chinese"
+            ,"Eastern European","European","French","German","Greek","Indian","Irish"
+            ,"Italian","Japanese","Jewish","Korean","Latin American","Mediterranean"
+            ,"Mexican","Middle Eastern","Nordic","Southern","Spanish","Thai","Vietnamese"};
 
     private Gson gson = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
@@ -65,9 +68,22 @@ public class FoodFacade {
         return getFoodResultDTOList(LIST_OF_FOOD_PROPERTIES_SEARCH, jsonObject);
     }
 
+    public RecipeDTOList foodOfTheWeek(LocalDate now) {
+        // Get this week's cuisine
+        TemporalField weekOfYear = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
+        int weekNumber = now.get(weekOfYear);
+        int dayNumber = now.getDayOfWeek().getValue();
+        String weekCuisine = CUISINES[(weekNumber % CUISINES.length) -1];
+        // Create the search asking only for the first 5.
+        Search search = new Search();
+        search.addParameter("cuisine", weekCuisine);
+        search.addParameter("offset","" + dayNumber);
+
+        return complexSearch(search);
+    }
+
     /**
      * Gets a detailed recipe by id with instructions
-     *
      * @param recipeId
      * @return a detailed recipe with instructions
      */
