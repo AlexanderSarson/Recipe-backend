@@ -2,6 +2,7 @@ package facades;
 
 import dtos.UserDto;
 import dtos.favourites.FavouriteRecipeDTO;
+import dtos.favourites.FavouriteRecipeDtoList;
 import entity.User;
 import errorhandling.AuthenticationException;
 import errorhandling.RecipeException;
@@ -74,8 +75,10 @@ class UserFacadeTest {
     void test_getFavouriteRecipeList() throws UserException {
         int expected = 1;
         UserDto userDto = userFacade.addFavourite(u1.getUserName(), favRecipeDTO);
-        int result = userFacade.getFavourites(userDto.getUsername()).getSize();
+        FavouriteRecipeDtoList dtoList = userFacade.getFavourites(userDto.getUsername());
+        int result = dtoList.getSize();
         assertEquals(expected, result);
+        assertEquals(favRecipeDTO.getImage(), dtoList.getFavouriteRecipes().get(0).getImage());
     }
 
     @Test
