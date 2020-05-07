@@ -1,6 +1,5 @@
 package utils;
 
-import concurrent.ParallelWorker;
 import session.Search;
 
 import javax.net.ssl.HttpsURLConnection;

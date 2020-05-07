@@ -1,6 +1,5 @@
 package utils;
 
-import concurrent.ParallelWorker;
 import errorhandling.SettingsException;
 
 import java.io.IOException;

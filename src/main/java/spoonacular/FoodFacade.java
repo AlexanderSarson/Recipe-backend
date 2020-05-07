@@ -1,6 +1,7 @@
 package spoonacular;
 
 import com.google.gson.*;
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import dtos.FoodIngredientDTO;
 import dtos.InstructionsDTO;
 import dtos.RecipeDTO;
@@ -197,12 +198,12 @@ public class FoodFacade {
     }
 
     public String sanitizeString(String input) {
-        String test = "";
+        StringBuilder stringBuilder = new StringBuilder();
         Pattern pattern = Pattern.compile("[a-zA-Z ]+");
         Matcher matcher = pattern.matcher(input);
         while(matcher.find()) {
-            test += matcher.group();
+            stringBuilder.append(matcher.group());
         }
-        return test;
+        return stringBuilder.toString();
     }
 }
