@@ -1,7 +1,6 @@
 package spoonacular;
 
 import com.google.gson.*;
-import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import dtos.FoodIngredientDTO;
 import dtos.InstructionsDTO;
 import dtos.RecipeDTO;
