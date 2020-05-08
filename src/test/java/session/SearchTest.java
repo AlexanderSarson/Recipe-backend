@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SearchTest {
-    private String json = "{offset:2,name:\"falafel\",includeIngredients:\"salt,bacon,cheese\" }";
+    private String json = "{offset:2,search:\"falafel\",includeIngredients:\"salt,bacon,cheese\" }";
     private JsonObject object;
 
     @BeforeEach
@@ -27,7 +27,7 @@ public class SearchTest {
 
     @Test
     public void testSearchFromJsonObject_with_invalid_parameters() {
-        String json = "{name:\"falafel\",includeDIngredients:\"salt,bacon,cheese\" }";
+        String json = "{search:\"falafel\",includeDIngredients:\"salt,bacon,cheese\" }";
         JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
 
         Search search = Search.searchFromJsonObject(jsonObject);
