@@ -12,7 +12,7 @@ public class RecipeResourceTest extends BaseResourceTest {
     
     @Test
     void test_searchForRecipe() {
-        String payload = "{name:\"Falafel Burgers with Feta Cucumber Sauce\", number:1}";
+        String payload = "{search:\"Falafel Burgers with Feta Cucumber Sauce\", number:1}";
         given()
                 .contentType("application/json")
                 .body(payload)
