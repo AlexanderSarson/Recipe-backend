@@ -1,22 +1,23 @@
 package facades;
 
-import dtos.RecipeDTO;
-import dtos.RecipeDTOList;
 import dtos.favourites.FavouriteRecipeDTO;
 import dtos.favourites.FavouriteRecipeDtoList;
 import entity.FavouriteRecipe;
-import session.SessionOffsetManager;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class StatisticFacade {
     private static EntityManagerFactory emf;
     private static StatisticFacade instance;
 
     private static final String MOST_POPULAR ="select fr.recipe_id, imgUrl, readyInMinutes, servings, title from favourite_recipe as fr join (select recipe_id, count(*) as count from user_favourites group by recipe_id) as counts on counts.recipe_id = fr.recipe_id order by count desc;";
+
+    private final Logger logger = Logger.getLogger(StatisticFacade.class.getName());
 
     private StatisticFacade(){}
 
@@ -41,7 +42,7 @@ public class StatisticFacade {
              recipes = entityManager.createNativeQuery(MOST_POPULAR, FavouriteRecipe.class).getResultList();
             entityManager.getTransaction().commit();
         } catch(Exception e ) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage());
         }finally {
             entityManager.close();
         }

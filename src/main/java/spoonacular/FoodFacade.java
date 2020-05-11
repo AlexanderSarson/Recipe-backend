@@ -31,7 +31,7 @@ public class FoodFacade {
     private static final String AUTOCOMPLETE_INGREDIENT = BASE_URL + "/food/ingredients/autocomplete";
     private static final List<String> LIST_OF_FOOD_PROPERTIES_RANDOM = Arrays.asList("id", "title", "servings", "readyInMinutes", "summary", "image", "dairyFree", "glutenFree", "vegan", "vegetarian", "veryHealthy");
     private static final List<String> LIST_OF_FOOD_PROPERTIES_SEARCH = Arrays.asList("id", "title", "image", "cuisines");
-    public static final String[] CUISINES = new String[]
+    private static final String[] CUISINES = new String[]
             {"African","American","British","Cajun","Caribbean","Chinese"
             ,"Eastern European","European","French","German","Greek","Indian","Irish"
             ,"Italian","Japanese","Jewish","Korean","Latin American","Mediterranean"
