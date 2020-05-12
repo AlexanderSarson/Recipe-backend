@@ -7,13 +7,13 @@ import dtos.RecipeDTO;
 import dtos.RecipeDTOList;
 import dtos.InstructionsDTO;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import session.Search;
 
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Disabled;
 
 public class FoodFacadeTest {
 
@@ -36,6 +36,13 @@ public class FoodFacadeTest {
         assertEquals(492564, result.getId());
     }
 
+    @Test
+    public void test_recipeOfTheWeek() {
+        LocalDate fakeNow = LocalDate.of(2000,1,1);
+        RecipeDTOList weekRecipe = FOODFACADE.recipeOfTheWeek(fakeNow);
+        // Because the complex does not return the cuisine, we can't check it here.
+        assertEquals(1, weekRecipe.getResults().size());
+    }
     
     @Test
     public void test_getRecipeById() {

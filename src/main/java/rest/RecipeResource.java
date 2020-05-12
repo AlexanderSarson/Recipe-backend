@@ -10,6 +10,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dtos.RecipeDTOList;
+import dtos.favourites.FavouriteRecipeDtoList;
+import facades.StatisticFacade;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,12 +25,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import session.Search;
 import session.SessionOffsetManager;
 import spoonacular.FoodFacade;
+import utils.EMF_Creator;
 
+import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.MediaType;
+import java.time.LocalDate;
 
 /**
  * REST Web Service
@@ -60,9 +65,11 @@ import javax.ws.rs.core.MediaType;
 )
 @Path("recipe")
 public class RecipeResource {
+    private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.CREATE);
 
-    private final FoodFacade foodFacade = new FoodFacade();
-    private final Gson gson = new Gson();
+    private FoodFacade foodFacade = new FoodFacade();
+    private StatisticFacade statisticFacade = StatisticFacade.getStatisticFacade(EMF);
+    private Gson gson = new Gson();
 
     @Context
     private UriInfo context;
@@ -129,6 +136,36 @@ public class RecipeResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String getRecipeById(@PathParam("id") long id) {
         return gson.toJson(foodFacade.getRecipeById(id));
+    }
+
+    @Operation(summary = "Get Recipes based on popularity",
+            tags = {"Recipe"},
+            responses = {
+                @ApiResponse(
+                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = FavouriteRecipeDtoList.class))),
+                @ApiResponse(responseCode = "200", description = "The most popular recipes")})
+    @Path("/popular")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMostPopular() {
+        return Response
+                .ok(statisticFacade.getMostPopular())
+                .build();
+    }
+
+    @Operation(summary = "Get this week's food",
+            tags = {"Recipe"},
+            responses = {
+                    @ApiResponse(
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RecipeDTOList.class))),
+                    @ApiResponse(responseCode = "200", description = "The week's recipes")})
+    @Path("/week")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFoodOfTheWeek() {
+        return Response
+                .ok(foodFacade.recipeOfTheWeek(LocalDate.now()))
+                .build();
     }
 
     /**

@@ -9,6 +9,9 @@ import session.Search;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,7 +30,12 @@ public class FoodFacade {
     private static final String RANDOM_URL = BASE_URL + "/recipes/random";
     private static final String AUTOCOMPLETE_INGREDIENT = BASE_URL + "/food/ingredients/autocomplete";
     private static final List<String> LIST_OF_FOOD_PROPERTIES_RANDOM = Arrays.asList("id", "title", "servings", "readyInMinutes", "summary", "image", "dairyFree", "glutenFree", "vegan", "vegetarian", "veryHealthy");
-    private static final List<String> LIST_OF_FOOD_PROPERTIES_SEARCH = Arrays.asList("id", "title", "image");
+    private static final List<String> LIST_OF_FOOD_PROPERTIES_SEARCH = Arrays.asList("id", "title", "image", "cuisines");
+    private static final String[] CUISINES = new String[]
+            {"African","American","British","Cajun","Caribbean","Chinese"
+            ,"Eastern European","European","French","German","Greek","Indian","Irish"
+            ,"Italian","Japanese","Jewish","Korean","Latin American","Mediterranean"
+            ,"Mexican","Middle Eastern","Nordic","Southern","Spanish","Thai","Vietnamese"};
 
     private Gson gson = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
@@ -62,9 +70,18 @@ public class FoodFacade {
         return getFoodResultDTOList(LIST_OF_FOOD_PROPERTIES_SEARCH, jsonObject);
     }
 
+    public RecipeDTOList recipeOfTheWeek(LocalDate now) {
+        TemporalField weekOfYear = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
+        int weekNumber = now.get(weekOfYear);
+        String weekCuisine = CUISINES[(weekNumber % CUISINES.length) -1];
+        Search search = new Search();
+        search.addParameter("cuisine", weekCuisine);
+        search.addParameter("number", "1");
+        return complexSearch(search);
+    }
+
     /**
      * Gets a detailed recipe by id with instructions
-     *
      * @param recipeId
      * @return a detailed recipe with instructions
      */

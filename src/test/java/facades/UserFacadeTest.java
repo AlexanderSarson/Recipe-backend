@@ -15,7 +15,7 @@ import javax.persistence.EntityManagerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class UserFacadeTest {
+public class UserFacadeTest {
 
     private static EntityManagerFactory entityManagerFactory;
     private static UserFacade userFacade;
