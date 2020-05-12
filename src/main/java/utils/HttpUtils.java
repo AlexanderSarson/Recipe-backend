@@ -35,6 +35,7 @@ public class HttpUtils {
     public static String doFetch(String completeUrl, HttpsMethod method, String apiKey) {
         String jsonResponse = null;
         try {
+            completeUrl = completeUrl.replace(" ", "%20");
             // Setup URL connection
             URL url = new URL(completeUrl);
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();

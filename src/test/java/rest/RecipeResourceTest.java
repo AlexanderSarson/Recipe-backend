@@ -6,12 +6,11 @@ import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import org.junit.jupiter.api.Disabled;
 
 public class RecipeResourceTest extends BaseResourceTest {
     
     @Test
-    void test_searchForRecipe() {
+    public void test_searchForRecipe() {
         String payload = "{search:\"Falafel Burgers with Feta Cucumber Sauce\", number:1}";
         given()
                 .contentType("application/json")
@@ -20,6 +19,30 @@ public class RecipeResourceTest extends BaseResourceTest {
                 .then()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("results", hasSize(1));
+    }
+
+    @Test
+    public void test_searchForRecipe_with_odd_input() {
+        String payload = "{search:\"Falafel\",excludeIngredients:\"unbleached all purpose flour,salt,bay leaf\",includeIngredients:\"hummus\",number:4}";
+        given()
+                .contentType("application/json")
+                .body(payload)
+                .post("recipe/search")
+                .then()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("results", hasSize(4));
+    }
+
+    @Test
+    public void test_searchForRecipe_with_cuisine() {
+        String payload = "{search:\"burger\",excludeIngredients:\"\",includeIngredients:\"\",excludeCuisine:\"british\",cuisine:\"american\",number:4}";
+        given()
+                .contentType("application/json")
+                .body(payload)
+                .post("recipe/search")
+                .then()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("results", hasSize(4));
     }
 
     @Test

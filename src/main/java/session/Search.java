@@ -22,7 +22,6 @@ public class Search {
     public static Search searchFromJsonObject(JsonObject object) {
         // Small workaround - due to the fact that titleMatch is called 'name' in your request from frontend.
         String name = object.get("search").getAsString();
-        name = name.replace(" ", "%20");
         Search search = new Search();
         search.addParameter("titleMatch",name);
 
@@ -31,7 +30,7 @@ public class Search {
         for(int i = 0; i < validParameters.length; i++) {
             String validParamString = validParameters[i].toString();
             JsonElement element = object.get(validParamString);
-            if(element != null) {
+            if(element != null && !element.getAsString().isEmpty()) {
                 search.addParameter(validParamString, element.getAsString());
             }
         }
