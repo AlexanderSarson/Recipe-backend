@@ -33,6 +33,7 @@ public class RecipeResourceTest extends BaseResourceTest {
                 .body("results", hasSize(4));
     }
 
+    @Test
     public void test_searchForRecipe_with_cuisine() {
         String payload = "{search:\"burger\",excludeIngredients:\"\",includeIngredients:\"\",excludeCuisine:\"british\",cuisine:\"american\",number:4}";
         given()
