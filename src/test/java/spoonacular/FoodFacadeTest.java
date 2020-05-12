@@ -37,11 +37,11 @@ public class FoodFacadeTest {
     }
 
     @Test
-    public void test_foodOfTheWeek() {
+    public void test_recipeOfTheWeek() {
         LocalDate fakeNow = LocalDate.of(2000,1,1);
         RecipeDTOList weekRecipe = FOODFACADE.recipeOfTheWeek(fakeNow);
         // Because the complex does not return the cuisine, we can't check it here.
-        assertEquals(10, weekRecipe.getResults().size());
+        assertEquals(1, weekRecipe.getResults().size());
     }
     
     @Test
