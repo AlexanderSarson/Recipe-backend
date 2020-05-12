@@ -73,7 +73,6 @@ public class FoodFacade {
     public RecipeDTOList recipeOfTheWeek(LocalDate now) {
         TemporalField weekOfYear = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
         int weekNumber = now.get(weekOfYear);
-        int dayNumber = now.getDayOfWeek().getValue();
         String weekCuisine = CUISINES[(weekNumber % CUISINES.length) -1];
         Search search = new Search();
         search.addParameter("cuisine", weekCuisine);
