@@ -23,7 +23,18 @@ public class RecipeResourceTest extends BaseResourceTest {
 
     @Test
     public void test_searchForRecipe_with_odd_input() {
-        String payload = "{search:\"Falafel\",excludeIngredients:\"unbleached all purpose flour,salt,bay leaf\",includeIngredients:\"hummus\", number:4}";
+        String payload = "{search:\"Falafel\",excludeIngredients:\"unbleached all purpose flour,salt,bay leaf\",includeIngredients:\"hummus\",number:4}";
+        given()
+                .contentType("application/json")
+                .body(payload)
+                .post("recipe/search")
+                .then()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("results", hasSize(4));
+    }
+
+    public void test_searchForRecipe_with_cuisine() {
+        String payload = "{search:\"burger\",excludeIngredients:\"\",includeIngredients:\"\",excludeCuisine:\"british\",cuisine:\"american\",number:4}";
         given()
                 .contentType("application/json")
                 .body(payload)
