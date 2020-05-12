@@ -164,7 +164,7 @@ public class RecipeResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getFoodOfTheWeek() {
         return Response
-                .ok(foodFacade.foodOfTheWeek(LocalDate.now()))
+                .ok(foodFacade.recipeOfTheWeek(LocalDate.now()))
                 .build();
     }
 

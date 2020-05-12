@@ -49,8 +49,4 @@ public class StatisticFacade {
         recipes.forEach(favouriteRecipe -> results.addRecipeToList(new FavouriteRecipeDTO(favouriteRecipe)));
         return results;
     }
-
-    public FavouriteRecipeDtoList getMostTrending() {
-        return null;
-    }
 }

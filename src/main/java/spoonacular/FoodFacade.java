@@ -70,7 +70,7 @@ public class FoodFacade {
         return getFoodResultDTOList(LIST_OF_FOOD_PROPERTIES_SEARCH, jsonObject);
     }
 
-    public RecipeDTOList foodOfTheWeek(LocalDate now) {
+    public RecipeDTOList recipeOfTheWeek(LocalDate now) {
         // Get this week's cuisine
         TemporalField weekOfYear = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
         int weekNumber = now.get(weekOfYear);
@@ -79,8 +79,7 @@ public class FoodFacade {
         // Create the search asking only for the first 5.
         Search search = new Search();
         search.addParameter("cuisine", weekCuisine);
-        search.addParameter("offset","" + dayNumber);
-
+        search.addParameter("number", "1");
         return complexSearch(search);
     }
 
